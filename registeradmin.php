@@ -3,8 +3,8 @@ require "connect.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 $post = file_get_contents('php://input');
-preg_match('/(?<=password":").+?(?=")/',$post,$username);
-preg_match('/(?<=username":").+?(?=")/',$post,$password);
+preg_match('/(?<=username":").+?(?=")/',$post,$username);
+preg_match('/(?<=password":").+?(?=")/',$post,$password);
 preg_match('/(?<=firstname":").+?(?=")/',$post,$firstname);
 preg_match('/(?<=lastname":").+?(?=")/',$post,$lastname);
 preg_match('/(?<=email":").+?(?=")/',$post,$email);

@@ -1,8 +1,8 @@
-ALTER TABLE drivers ADD CONSTRAINT checKdrivermail CHECK(Email like("%@.%"));
-ALTER TABLE admin ADD CONSTRAINT checKadminmail CHECK(Email like("%@.%"));
-ALTER TABLE customers ADD CONSTRAINT checKcustomermail CHECK(Email like("%@.%"));
 ALTER TABLE drivers ADD CONSTRAINT checKdrivergender CHECK(Gender in("M","F"));
 ALTER TABLE customers ADD CONSTRAINT checKcustomergender CHECK(Gender in("M","F"));
 ALTER TABLE orders add CONSTRAINT orderloc CHECK(WhereOrder in("CART","RESTAURANT","ACCEPTED","INDELIVERY","DELIVERED"));
 ALTER TABLE loginandregister add CONSTRAINT User_Type CHECK(UserType in("ADMIN","CUSTOMER","DRIVER","SHOP"));
 ALTER TABLE shop add constraint ShopSize CHECK(Size BETWEEN 0 and 3)
+alter TABLE shop add CONSTRAINT shopactive check(Active in(0,1))
+alter TABLE feedback add CONSTRAINT reviewfor CHECK(Type in("SHOP","ITEM"))
+
