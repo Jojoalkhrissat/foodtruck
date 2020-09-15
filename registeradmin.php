@@ -31,7 +31,7 @@ for ($i=0;$i<10;$i++){
 $adminkey .= $characters[rand(0, $charactersLength - 1)];
 
 }
-$admininfo= "INSERT INTO `admin`(`FName`, `LName`, `AdminKey`, `Email`, `Phone`) VALUES ('$firstname[0]','$lastname[0]','$adminkey','$email[0]','$phonenumber[0]')";
+$admininfo= "INSERT INTO `admin`(`FName`, `LName`, `AdminKey`, `Email`, `Phone`,`Photo`) VALUES ('$firstname[0]','$lastname[0]','$adminkey','$email[0]','$phonenumber[0]','$photopath[0]')";
 $stmt= $conn->prepare($admininfo);
 $stmt->execute();
 
@@ -74,6 +74,16 @@ switch (true) {
 		$myfile = "img/profile/admin_".$id[0].".jpg";
 		
 		break;
+		case stristr($photopath[0],"jpeg"):
+		$myfile = "img/profile/admin_".$id[0].".jpeg";
+		break;
+		case stristr($photopath[0],"JPEG"):
+		$myfile = "img/profile/admin_".$id[0].".jpeg";
+		break;
+	case stristr($photopath[0],"Jpeg"):
+		$myfile = "img/profile/admin_".$id[0].".jpeg";
+		
+		break;
 		case stristr($photopath[0],"gif"):
 		$myfile = "img/profile/admin_".$id[0].".gif";
 		
@@ -101,15 +111,14 @@ switch (true) {
 		echo "file is not an image";
 		break;
 }
-$MyJsonData = preg_replace('/"Photo":""/', '"Photo":"'.$myfile.'"', $MyJsonData, 1);
+$MyJsonData = preg_replace('/"Photo":".+?"/', '"Photo":"'.$myfile.'"', $MyJsonData, 1);
 echo $MyJsonData;
 
-
+echo "]";
 
 
 
 $adminphoto= 'UPDATE admin set Photo="'.$myfile.'" where Email="'.$email[0].'"'; 
-echo $adminphoto;
 $photoupdate= $conn->prepare($adminphoto);
 $photoupdate->execute();
 

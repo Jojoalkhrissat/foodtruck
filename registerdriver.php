@@ -61,8 +61,7 @@ $MyJson=$MyJson.",".json_encode($row);
 endwhile;
 $MyJson=preg_replace('/,/', '', $MyJson, 1);
 preg_match('/(?<=id":").+?(?=")/',$MyJson,$carid);
-$userinfo= "INSERT INTO `drivers`(`FName`, `LName`, `PhoneNumber`, `Email`, `Address`, `DOB`, `Gender`,  `LicencePhoto1`, `LicencePhoto2`, `IdPhoto1`, `IdPhoto2`, `NonCriminalRecord`, `CarAssigned`,`CarColor`, `CarPlate`, `CarLicence1`, `CarLicence2`) VALUES ('$firstname[0]','$lastname[0]','$phonenumber[0]','$email[0]','$address[0]','$dob[0]','$gender[0]','$licencephoto1[0]','$licencephoto2[0]','$idphoto1[0]','$idphoto2[0]','$noncriminalrecord[0]','$carid[0]','$carcolor[0]','$carplate[0]','$carlicence1[0]','$carlicence2[0]')";
-echo $userinfo;
+$userinfo= 'INSERT INTO `drivers`(`FName`, `LName`, `PhoneNumber`, `Email`, `Address`, `DOB`, `Gender`,  `LicencePhoto1`, `LicencePhoto2`, `IdPhoto1`, `IdPhoto2`, `NonCriminalRecord`, `CarAssigned`,`CarColor`, `CarPlate`, `CarLicence1`, `CarLicence2`,`Photo`) VALUES ("'.$firstname[0].'","'.$lastname[0].'","'.$phonenumber[0].'","'.$email[0].'","'.$address[0].'","'.$dob[0].'","'.$gender[0].'","'.$licencephoto1[0].'","'.$licencephoto2[0].'","'.$idphoto1[0].'","'.$idphoto2[0].'","'.$noncriminalrecord[0].'","'.$carid[0].'","'.$carcolor[0].'","'.$carplate[0].'","'.$carlicence1[0].'","'.$carlicence2[0].'","'.$photopath[0].'")';
 $stmt= $conn->prepare($userinfo);
 $stmt->execute();
 
@@ -75,8 +74,7 @@ while($row = $getuser->fetch()):
 $MyJsonData=$MyJsonData.",".json_encode($row);
 endwhile;
 $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
-
-
+preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 
 if(isset($photopath[0])){
 $contents=file_get_contents($photopath[0]);
@@ -99,6 +97,16 @@ switch (true) {
 		break;
 	case stristr($photopath[0],"Jpg"):
 		$myfile = "img/profile/driver_".$id[0].".jpg";
+		
+		break;
+		case stristr($photopath[0],"jpeg"):
+		$myfile = "img/profile/driver_".$id[0].".jpeg";
+		break;
+		case stristr($photopath[0],"Jpeg"):
+		$myfile = "img/profile/driver_".$id[0].".jpeg";
+		break;
+	case stristr($photopath[0],"JPEG"):
+		$myfile = "img/profile/driver_".$id[0].".jpeg";
 		
 		break;
 		case stristr($photopath[0],"gif"):
@@ -149,6 +157,16 @@ switch (true) {
 		break;
 	case stristr($idphoto1[0],"Jpg"):
 		$myfile1 = "img/legalphotos/driver_id1_".$id[0].".jpg";
+		
+		break;
+		case stristr($idphoto1[0],"jpeg"):
+		$myfile1 = "img/legalphotos/driver_id1_".$id[0].".jpeg";
+		break;
+		case stristr($idphoto1[0],"Jpeg"):
+		$myfile1 = "img/legalphotos/driver_id1_".$id[0].".jpeg";
+		break;
+	case stristr($idphoto1[0],"JPEG"):
+		$myfile1 = "img/legalphotos/driver_id1_".$id[0].".jpeg";
 		
 		break;
 		case stristr($idphoto1[0],"gif"):
@@ -202,6 +220,16 @@ switch (true) {
 		$myfile2 = "img/legalphotos/driver_id2_".$id[0].".jpg";
 		
 		break;
+		case stristr($idphoto2[0],"jpeg"):
+		$myfile2 = "img/legalphotos/driver_id2_".$id[0].".jpeg";
+		break;
+		case stristr($idphoto2[0],"JPEG"):
+		$myfile2 = "img/legalphotos/driver_id2_".$id[0].".jpeg";
+		break;
+	case stristr($idphoto2[0],"Jpeg"):
+		$myfile2 = "img/legalphotos/driver_id2_".$id[0].".jpeg";
+		
+		break;
 		case stristr($idphoto2[0],"gif"):
 		$myfile2 = "img/legalphotos/driver_id2_".$id[0].".gif";
 		
@@ -249,6 +277,16 @@ switch (true) {
 		break;
 	case stristr($licencephoto1[0],"Jpg"):
 		$myfile3 = "img/legalphotos/driver_licence1_".$id[0].".jpg";
+		
+		break;
+		case stristr($licencephoto1[0],"jpeg"):
+		$myfile3 = "img/legalphotos/driver_licence1_".$id[0].".jpeg";
+		break;
+		case stristr($licencephoto1[0],"Jpeg"):
+		$myfile3 = "img/legalphotos/driver_licence1_".$id[0].".jpeg";
+		break;
+	case stristr($licencephoto1[0],"JPEG"):
+		$myfile3 = "img/legalphotos/driver_licence1_".$id[0].".jpeg";
 		
 		break;
 		case stristr($licencephoto1[0],"gif"):
@@ -300,6 +338,16 @@ switch (true) {
 		$myfile4 = "img/legalphotos/driver_licence2_".$id[0].".jpg";
 		
 		break;
+		case stristr($licencephoto2[0],"jpeg"):
+		$myfile4 = "img/legalphotos/driver_licence2_".$id[0].".jpeg";
+		break;
+		case stristr($licencephoto2[0],"Jpeg"):
+		$myfile4 = "img/legalphotos/driver_licence2_".$id[0].".jpeg";
+		break;
+	case stristr($licencephoto2[0],"JPEG"):
+		$myfile4 = "img/legalphotos/driver_licence2_".$id[0].".jpeg";
+		
+		break;
 		case stristr($licencephoto2[0],"gif"):
 		$myfile4 = "img/legalphotos/driver_licence2_".$id[0].".gif";
 		
@@ -346,6 +394,16 @@ switch (true) {
 		break;
 	case stristr($noncriminalrecord[0],"Jpg"):
 		$myfile5 = "img/legalphotos/driver_noncriminalrecord_".$id[0].".jpg";
+		
+		break;
+		case stristr($noncriminalrecord[0],"jpeg"):
+		$myfile5 = "img/legalphotos/driver_noncriminalrecord_".$id[0].".jpeg";
+		break;
+		case stristr($noncriminalrecord[0],"Jpeg"):
+		$myfile5 = "img/legalphotos/driver_noncriminalrecord_".$id[0].".jpeg";
+		break;
+	case stristr($noncriminalrecord[0],"JPEG"):
+		$myfile5 = "img/legalphotos/driver_noncriminalrecord_".$id[0].".jpeg";
 		
 		break;
 		case stristr($noncriminalrecord[0],"gif"):
@@ -407,6 +465,16 @@ switch (true) {
 		$myfile6 = "img/legalphotos/driver_carlicence1_".$id[0].".jpg";
 		
 		break;
+		case stristr($carlicence1[0],"jpeg"):
+		$myfile6 = "img/legalphotos/driver_carlicence1_".$id[0].".jpeg";
+		break;
+		case stristr($carlicence1[0],"Jpeg"):
+		$myfile6 = "img/legalphotos/driver_carlicence1_".$id[0].".jpeg";
+		break;
+	case stristr($carlicence1[0],"JPEG"):
+		$myfile6 = "img/legalphotos/driver_carlicence1_".$id[0].".jpeg";
+		
+		break;
 		case stristr($carlicence1[0],"gif"):
 		$myfile6 = "img/legalphotos/driver_carlicence1_".$id[0].".gif";
 		
@@ -462,6 +530,16 @@ switch (true) {
 		$myfile7 = "img/legalphotos/driver_carlicence2_".$id[0].".jpg";
 		
 		break;
+		case stristr($carlicence2[0],"jpeg"):
+		$myfile7 = "img/legalphotos/driver_carlicence2_".$id[0].".jpeg";
+		break;
+		case stristr($carlicence2[0],"Jpeg"):
+		$myfile7 = "img/legalphotos/driver_carlicence2_".$id[0].".jpeg";
+		break;
+	case stristr($carlicence2[0],"JPEG"):
+		$myfile7 = "img/legalphotos/driver_carlicence2_".$id[0].".jpeg";
+		
+		break;
 		case stristr($carlicence2[0],"gif"):
 		$myfile7 = "img/legalphotos/driver_carlicence2_".$id[0].".gif";
 		
@@ -495,7 +573,7 @@ switch (true) {
 }
 
 
-$MyJsonData = preg_replace('/"Photo":""/', '"Photo":"'.$myfile.'"', $MyJsonData, 1);
+$MyJsonData = preg_replace('/"Photo":".+?"/', '"Photo":"'.$myfile.'"', $MyJsonData, 1);
 $MyJsonData = preg_replace('/"IdPhoto1":".+?"/', '"IdPhoto1":"'.$myfile1.'"', $MyJsonData, 1);
 $MyJsonData = preg_replace('/"IdPhoto2":".+?"/', '"IdPhoto2":"'.$myfile2.'"', $MyJsonData, 1);
 $MyJsonData = preg_replace('/"LicencePhoto1":".+?"/', '"LicencePhoto1":"'.$myfile3.'"', $MyJsonData, 1);
@@ -521,7 +599,7 @@ $photoupdate->execute();
 
 
 echo $MyJsonData;
-
+echo "]";
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 $userlogin="INSERT INTO `loginandregister`(`DriverId`, `UserName`, `PassWord`, `UserType`) VALUES ('$id[0]','$username[0]','$password[0]','DRIVER')";
 $stmt1= $conn->prepare($userlogin);

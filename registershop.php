@@ -43,8 +43,6 @@ $MyJsonData=$MyJsonData.",".json_encode($row);
 endwhile;
 $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
 
-echo $MyJsonData;
-echo ']';
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 
 
@@ -70,6 +68,16 @@ switch (true) {
 		break;
 	case stristr($photopath[0],"Jpg"):
 		$myfile = "img/profile/shop_".$id[0].".jpg";
+		
+		break;
+		case stristr($photopath[0],"jpeg"):
+		$myfile = "img/profile/shop_".$id[0].".jpeg";
+		break;
+		case stristr($photopath[0],"JPEG"):
+		$myfile = "img/profile/shop_".$id[0].".jpeg";
+		break;
+	case stristr($photopath[0],"Jpeg"):
+		$myfile = "img/profile/shop_".$id[0].".jpeg";
 		
 		break;
 		case stristr($photopath[0],"gif"):
@@ -152,7 +160,7 @@ switch (true) {
 		echo "file is not an image";
 		break;
 }
-$MyJsonData = preg_replace('/"Photo":""/', '"Photo":"'.$myfile.'"', $MyJsonData, 1);
+$MyJsonData = preg_replace('/"Photo":".+?"/', '"Photo":"'.$myfile.'"', $MyJsonData, 1);
 $MyJsonData = preg_replace('/"IdPhoto":".+?"/', '"IdPhoto":"'.$myfile1.'"', $MyJsonData, 1);
 
 }
@@ -163,7 +171,7 @@ $photoupdate->execute();
 file_put_contents($myfile,$contents);
 file_put_contents($myfile1,$contents1);
 echo $MyJsonData;
-
+echo ']';
 
 $userlogin="INSERT INTO `loginandregister`(`ShopId`, `UserName`, `PassWord`, `UserType`) VALUES ('$id[0]','$username[0]','$password[0]','SHOP')";
 $stmt1= $conn->prepare($userlogin);
