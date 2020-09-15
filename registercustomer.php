@@ -38,9 +38,70 @@ while($row = $getuser->fetch()):
 $MyJsonData=$MyJsonData.",".json_encode($row);
 endwhile;
 $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
+preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
+
+
+
+
+if(isset($photopath[0])){
+$contents=file_get_contents($photopath[0]);
+switch (true) {
+	case stristr($photopath[0],"png"):
+		$myfile = "img/profile/customer_".$id[0].".png";		
+		break;
+		case stristr($photopath[0],"PNG"):
+		$myfile = "img/profile/customer_".$id[0].".png";
+		break;
+	case stristr($photopath[0],"Png"):
+		$myfile = "img/profile/customer_".$id[0].".png";
+		break;
+		case stristr($photopath[0],"jpg"):
+		$myfile = "img/profile/customer_".$id[0].".jpg";
+		break;
+		case stristr($photopath[0],"JPG"):
+		$myfile = "img/profile/customer_".$id[0].".jpg";
+		break;
+	case stristr($photopath[0],"Jpg"):
+		$myfile = "img/profile/customer_".$id[0].".jpg";
+		
+		break;
+		case stristr($photopath[0],"gif"):
+		$myfile = "img/profile/customer_".$id[0].".gif";
+		
+		break;
+		case stristr($photopath[0],"GIF"):
+		$myfile = "img/profile/customer_".$id[0].".gif";
+		
+		break;
+	case stristr($photopath[0],"Gif"):
+		$myfile = "img/profile/customer_".$id[0].".gif";
+		
+		break;
+		case stristr($photopath[0],"TIFF"):
+		$myfile = "img/profile/customer_".$id[0].".tiff";
+		break;
+		case stristr($photopath[0],"tiff"):
+		$myfile = "img/profile/customer_".$id[0].".tiff";
+		
+		break;
+	case stristr($photopath[0],"Tiff"):
+		$myfile = "img/profile/customer_".$id[0].".tiff";
+		
+		break;
+	default:
+		echo "file is not an image";
+		break;
+}
+$MyJsonData = preg_replace('/"Photo":""/', '"Photo":"'.$myfile.'"', $MyJsonData, 1);
+
 echo $MyJsonData;
 
-preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
+$customerphoto= 'UPDATE customers set Photo="'.$myfile.'" where Email="'.$email[0].'"'; 
+$photoupdate= $conn->prepare($customerphoto);
+$photoupdate->execute();
+
+file_put_contents($myfile,$contents);
+
 $userlogin="INSERT INTO `loginandregister`(`CustomerId`, `UserName`, `PassWord`, `UserType`) VALUES ('$id[0]','$username[0]','$password[0]','CUSTOMER')";
 $stmt1= $conn->prepare($userlogin);
 $stmt1->execute();
