@@ -154,7 +154,7 @@ switch (true) {
 }
 $MyJsonData = preg_replace('/"Photo":""/', '"Photo":"'.$myfile.'"', $MyJsonData, 1);
 $MyJsonData = preg_replace('/"IdPhoto":".+?"/', '"IdPhoto":"'.$myfile1.'"', $MyJsonData, 1);
-echo $MyJsonData;
+
 }
 $shopphoto= 'UPDATE shop set Photo="'.$myfile.'", IdPhoto="'.$myfile1.'" where Email="'.$email[0].'"'; 
 $photoupdate= $conn->prepare($shopphoto);
@@ -162,7 +162,7 @@ $photoupdate->execute();
 
 file_put_contents($myfile,$contents);
 file_put_contents($myfile1,$contents1);
-
+echo $MyJsonData;
 
 
 $userlogin="INSERT INTO `loginandregister`(`ShopId`, `UserName`, `PassWord`, `UserType`) VALUES ('$id[0]','$username[0]','$password[0]','SHOP')";
