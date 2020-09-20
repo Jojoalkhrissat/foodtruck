@@ -27,11 +27,9 @@ preg_match('/(?<=address=).+?(?=&|$)/',$post,$address);
 preg_match('/(?<=dob=).+?(?=&|$)/',$post,$dob);
 }
 $userinfo= "INSERT INTO `customers`(`FName`, `LName`, `Email`, `PhoneNumber`,`Address`,`DOB`,`Gender`,`Photo`) VALUES ('$firstname[0]','$lastname[0]','$email[0]','$phonenumber[0]','$address[0]','$dob[0]','$gender[0]','$photopath[0]')";
-echo $userinfo;
 $stmt= $conn->prepare($userinfo);
 $stmt->execute();
 $fetchuserinfo='SELECT * FROM customers WHERE Email="'.$email[0].'"';
-echo $fetchuserinfo;
 $getuser = $conn->query($fetchuserinfo);
 $getuser->setFetchMode(PDO::FETCH_ASSOC);
 echo '[';
