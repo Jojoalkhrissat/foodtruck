@@ -8,7 +8,7 @@ if(!isset($subcategory[0])){
 preg_match('/(?<=subcategory=).+?(?=&|$)/',$post,$subcategory);
 }else{
 $MyJsonData1="";
-$itemspersub="SELECT `id`, `Name`, `Shop`, `ItemPhoto`, `Price`, `TimesSold` FROM `items` where `SubCategory`='$subcategory[0]' limit 20 ";
+$itemspersub="SELECT `id`, `Name`, `Shop`, `Photo`, `Price`, `TimesSold` FROM `items` where `SubCategory`='$subcategory[0]' limit 20 ";
 $getitemspersub = $conn->query($itemspersub);
 $getitemspersub->setFetchMode(PDO::FETCH_ASSOC);
 while($row = $getitemspersub->fetch()):
