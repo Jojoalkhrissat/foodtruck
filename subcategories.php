@@ -1,15 +1,11 @@
 <?php
 require "connect.php";
 if ($_SERVER["REQUEST_METHOD"] == "GET"){
+	$category=$_GET['category'];
 	try{
-$post = file_get_contents('php://input');
-preg_match('/(?<=category":").+?(?=")/',$post,$category);
-if(!isset($category[0])){
-preg_match('/(?<=category=).+?(?=&|$)/',$post,$category);
-}else{
 $MyJsonData1="";
 echo "[";
-$subcategories="SELECT `id`, `Name`, `Photo` FROM `subcategory` where Category='$category[0]'";
+$subcategories="SELECT `id`, `Name`, `Photo` FROM `subcategory` where Category='$category'";
 $getsubcategories = $conn->query($subcategories);
 $getsubcategories->setFetchMode(PDO::FETCH_ASSOC);
 while($row = $getsubcategories->fetch()):
@@ -18,7 +14,6 @@ endwhile;
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 echo $MyJsonData1;
 echo ']';
-}
 }catch(Exception $e){
 	echo "400 error bad request";
 }
