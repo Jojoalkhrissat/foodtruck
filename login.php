@@ -57,6 +57,7 @@ $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 echo $MyJsonData1;
 echo "]}";
 }else{
+	http_response_code(401);
 	echo "Wrong username or password";
 }
 }catch(Exception $e){
