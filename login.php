@@ -61,10 +61,12 @@ echo "]}";
 	echo "Wrong username or password";
 }
 }catch(Exception $e){
+	http_response_code(400);
 echo "400 error bad request";	
 }
 
 }else{
+	http_response_code(400);
 	echo "400 error bad request";
 }
 ?>

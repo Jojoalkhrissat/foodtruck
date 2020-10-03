@@ -4,7 +4,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 		$shop=$_GET['shop'];
 	try{
 $MyJsonData1="";
-$itemspersub="SELECT `id`,`SubCategory`, `Name`, `Shop`, `Photo`, `Price`, `TimesSold` FROM `items` where `Shop`='$shop'";
+$itemspersub="SELECT `id`,`SubCategory`, `Name`, `Shop`, `Photo`,`Photo1`,`Photo2`, `Price`, `TimesSold` FROM `items` where `Shop`='$shop'";
 $getitemspersub = $conn->query($itemspersub);
 $getitemspersub->setFetchMode(PDO::FETCH_ASSOC);
 while($row = $getitemspersub->fetch()):

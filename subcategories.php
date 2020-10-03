@@ -16,8 +16,10 @@ echo $MyJsonData1;
 echo ']';
 }catch(Exception $e){
 	echo "400 error bad request";
+	http_response_code(400);
 }
 }else{
 	echo "400 error bad request";
+http_response_code(400);
 }
 ?>
