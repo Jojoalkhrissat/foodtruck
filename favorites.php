@@ -4,7 +4,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 		$customerid=$_GET['customerid'];
 	try{
 $MyJsonData1="";
-$itemsperfav="SELECT MF."."ItemId,I.Name,I.Description,I.Shop,I.Photo,I.Photo1,I.Photo2, I.Price, I.TimesSold,avg(F.Rating) as Rating,count(F.Rating) as RatingNumber FROM items I,feedback F,favorites MF where F.ItemId=I.id and MF.ItemId=I.id and MF.CustomerId=$customerid GROUP By F.ItemId";
+$itemsperfav="SELECT MF."."ItemId,I.Name,I.Description,I.Shop,I.Photo,I.Photo1,I.Photo2, I.Price, I.TimesSold,avg(F.Rating) as Rating,count(F.Rating) as RatingNumber FROM items I left join feedback F on I.id=F.ItemId ,favorites MF where MF.ItemId=I.id and MF.CustomerId=$customerid GROUP By F.ItemId";
 $getitemsperfav = $conn->query($itemsperfav);
 $getitemsperfav->setFetchMode(PDO::FETCH_ASSOC);
 $count=$getitemsperfav->rowCount();
