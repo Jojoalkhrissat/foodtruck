@@ -13,7 +13,7 @@ preg_match('/(?<=count=).+?(?=&|$)/',$post,$count);
 }
 if(isset($count[0])&&isset($customerid[0])&&isset($itemid[0])){
 $MyJsonData1="";
-$itemspersub="SELECT I."."id, I.Name,'' as IsFavorite,I.Description,I.Shop,S.ShopName, I.Photo,I.Photo1,I.Photo2, I.Price, I.TimesSold,avg(F.Rating) as Rating,count(F.Rating) as RatingNumber FROM items I left join feedback F on F.ItemId=I.id  left join shop S on I.Shop=S.id left join subcategory SU on I.SubCategory=SU.id and F.ItemId=I.id where I.id=$itemid[0] GROUP By I.id";
+$itemspersub="SELECT I."."id, I.Name,I.Description,I.Shop,S.ShopName, I.Photo,I.Photo1,I.Photo2, I.Price, I.TimesSold,avg(F.Rating) as Rating,count(F.Rating) as RatingNumber FROM items I left join feedback F on F.ItemId=I.id  left join shop S on I.Shop=S.id left join subcategory SU on I.SubCategory=SU.id where I.id=$itemid[0] GROUP By I.id";
 $getitemspersub = $conn->query($itemspersub);
 $getitemspersub->setFetchMode(PDO::FETCH_ASSOC);
 while($row = $getitemspersub->fetch()):
