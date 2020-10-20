@@ -23,6 +23,7 @@ endwhile;
 $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 preg_match('/(?<=Count":").+?(?=")/',$MyJsonData,$Count);
+if(isset($Count[0])){
 if($Count[0]==$count[0]){
 
 $addtocart= 'DELETE FROM `orders` WHERE id='.$id[0].' ';
@@ -37,8 +38,11 @@ $stmt= $conn->prepare($updatecount);
 $stmt->execute();
 $isinserted= $stmt->rowCount();
 }else{
+$isinserted=0;
+$Count[0]=0;
 echo '{"ItemId":"'.$itemid[0].'","CustomerId":"'.$customerid[0].'","count":"'.$count[0].'","message":"you can not remove more than you have"}';
 $isinserted=0;
+
 http_response_code(400);
 }
 
@@ -54,7 +58,10 @@ echo '{"ItemId":"'.$itemid[0].'","CustomerId":"'.$customerid[0].'","count":"'.$c
 http_response_code(400);
 echo '{"ItemId":"'.$itemid[0].'","CustomerId":"'.$customerid[0].'","count":"'.$count[0].'","message":"item was not removed"}';
 }
-
+}else{
+	http_response_code(400);
+echo '{"ItemId":"'.$itemid[0].'","CustomerId":"'.$customerid[0].'","count":"'.$count[0].'","message":"item was not removed"}';
+}
 }else{
 http_response_code(400);
 $itemid[0]="Not Valid";
@@ -66,5 +73,8 @@ echo '{"ItemId":"'.$itemid[0].'","CustomerId":"'.$customerid[0].'","count":"'.$c
 catch(Exception $e){
 
 }
+}else{
+	http_response_code(400);
+echo '{"ItemId":"'.$itemid[0].'","CustomerId":"'.$customerid[0].'","count":"'.$count[0].'","message":"Bad Request"}';
 }
 ?>

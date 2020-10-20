@@ -15,6 +15,8 @@ while($row = $getitems->fetch()):
 $MyJsonData1=$MyJsonData1.",".json_encode($row);
 endwhile;
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
+$MyJsonData1=preg_replace('/"Description":null/', '"Description":"abc"', $MyJsonData1);
+$MyJsonData1=preg_replace('/"Rating":null/', '"Rating":"1"', $MyJsonData1);
 $MyJsonData1 = preg_replace('/(?<="IsFavorite":).+?(?=,)/', '"NO"', $MyJsonData1);
 echo $MyJsonData1;
 echo ']';
@@ -29,6 +31,8 @@ while($row = $getitems->fetch()):
 $MyJsonData1=$MyJsonData1.",".json_encode($row);
 endwhile;
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
+$MyJsonData1=preg_replace('/"Rating":null/', '"Rating":"1"', $MyJsonData1);
+$MyJsonData1=preg_replace('/"Description":null/', '"Description":"abc"', $MyJsonData1);
 $MyJsonData1 = preg_replace('/(?<="IsFavorite":)(?!'.$customerid.').+?(?=,)/', '"NO"', $MyJsonData1);
 $MyJsonData1 = preg_replace('/(?<="IsFavorite":")'.$customerid.'(?=")/', 'YES', $MyJsonData1);
 echo $MyJsonData1;

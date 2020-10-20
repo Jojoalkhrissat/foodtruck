@@ -16,6 +16,7 @@ if($_FILES['avatar'])
     $avatar_name = $_FILES["avatar"]["name"];
     $avatar_tmp_name = $_FILES["avatar"]["tmp_name"];
     $error = $_FILES["avatar"]["error"];
+
 if($error > 0){
         $response = array(
             "status" => "error",
@@ -40,7 +41,7 @@ preg_match('/(?<=UserType":").+?(?=")/',$MyJsonData,$usertype);
 switch ($usertype) {
 case "ADMIN":
 preg_match('/(?<=AdminId":").+?(?=")/',$MyJsonData,$adminid);
-$empt= 'UPDATE admin set Photo=" " where id="'.$id.'"';
+$empt= 'UPDATE admin set Photo=" " where id="'.$adminid[0].'"';
 $emptyphoto= $conn->prepare($empt);
 $emptyphoto->execute();
 $upload_name = $upload_dir.'admin/'.$adminid[0].strtolower($random_name[0]);
@@ -51,7 +52,7 @@ $count = $photoupdate->rowCount();
 break;
 case "CUSTOMER":
 preg_match('/(?<=CustomerId":").+?(?=")/',$MyJsonData,$customerid);
-$empt= 'UPDATE customers set Photo=" " where id="'.$id.'"';
+$empt= 'UPDATE customers set Photo=" " where id="'.$customerid[0].'"';
 $emptyphoto= $conn->prepare($empt);
 $emptyphoto->execute();
 $upload_name = $upload_dir.'customer/'.$customerid[0].strtolower($random_name[0]);
@@ -63,7 +64,7 @@ break;
 case "DRIVER":
 $upload_name = $upload_dir.'driver/'.$driverid[0].strtolower($random_name[0]);
 preg_match('/(?<=DriverId":").+?(?=")/',$MyJsonData,$driverid);
-$empt= 'UPDATE drivers set Photo=" " where id="'.$id.'"';
+$empt= 'UPDATE drivers set Photo=" " where id="'.$driverid[0].'"';
 $emptyphoto= $conn->prepare($empt);
 $emptyphoto->execute();
 $driverphoto= 'UPDATE drivers set Photo="'.$upload_dir.'driver/'.$driverid[0].$random_name[0].'" where id="'.$driverid[0].'"';
@@ -74,7 +75,7 @@ break;
 case "SHOP":
 
 preg_match('/(?<=ShopId":").+?(?=")/',$MyJsonData,$shopid);
-$empt= 'UPDATE shop set Photo=" " where id="'.$id.'"';
+$empt= 'UPDATE shop set Photo=" " where id="'.$shopid[0].'"';
 $emptyphoto= $conn->prepare($empt);
 $emptyphoto->execute();
 $upload_name = $upload_dir.'shop/'.$shopid[0].strtolower($random_name[0]);
@@ -90,7 +91,7 @@ preg_match('/(?<=CustomerId":").+?(?=")/',$MyJsonData,$customerid);
 preg_match('/(?<=DriverId":").+?(?=")/',$MyJsonData,$driverid);
 
 if(isset($adminid[0])){
-    $empt= 'UPDATE admin set Photo=" " where id="'.$id.'"';
+    $empt= 'UPDATE admin set Photo=" " where id="'.$adminid[0].'"';
 $emptyphoto= $conn->prepare($empt);
 $emptyphoto->execute();
     $upload_name = $upload_dir.'admin/'.$adminid[0].strtolower($random_name[0]);
@@ -100,7 +101,7 @@ $photoupdate->execute();
 $count = $photoupdate->rowCount();
 }
 elseif(isset($shopid[0])){
-    $empt= 'UPDATE shop set Photo=" " where id="'.$id.'"';
+    $empt= 'UPDATE shop set Photo=" " where id="'.$shopid[0].'"';
 $emptyphoto= $conn->prepare($empt);
 $emptyphoto->execute();
 $upload_name = $upload_dir.'shop/'.$shopid[0].strtolower($random_name[0]);
@@ -110,7 +111,7 @@ $photoupdate->execute();
 $count = $photoupdate->rowCount();
 }
 elseif(isset($customerid[0])){
-    $empt= 'UPDATE customers set Photo=" " where id="'.$id.'"';
+    $empt= 'UPDATE customers set Photo=" " where id="'.$customerid[0].'"';
 $emptyphoto= $conn->prepare($empt);
 $emptyphoto->execute();
     $upload_name = $upload_dir.'customer/'.$customerid[0].strtolower($random_name[0]);
@@ -119,7 +120,7 @@ $photoupdate= $conn->prepare($customerphoto);
 $photoupdate->execute();
 $count = $photoupdate->rowCount();
 }elseif(isset($driverid[0])){
-     $empt= 'UPDATE drivers set Photo=" " where id="'.$id.'"';
+     $empt= 'UPDATE drivers set Photo=" " where id="'.$driverid[0].'"';
 $emptyphoto= $conn->prepare($empt);
 $emptyphoto->execute();
 $upload_name = $upload_dir.'driver/'.$driverid[0].strtolower($random_name[0]);
@@ -141,6 +142,7 @@ break;
 
 if($count>0){
 if(move_uploaded_file($avatar_tmp_name , $upload_name)) {
+	echo "[";
             $response = array(
                 "status" => "success",
                 "error" => false,
@@ -182,4 +184,5 @@ if(move_uploaded_file($avatar_tmp_name , $upload_name)) {
 }
 
 echo json_encode($response);
+
 ?>

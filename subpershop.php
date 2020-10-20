@@ -4,7 +4,7 @@ echo "[";
 if ($_SERVER["REQUEST_METHOD"] == "GET"){
 	try{
 		$shop=$_GET['shop'];
-$subcategories="SELECT DISTINCT I."."subcategory, S."."Name,S."."Photo from items I inner JOIN subcategory S on I".".SubCategory=S".".id where I".".Shop=".$shop."";
+$subcategories="SELECT I."."SubCategory as subcategory, SU."."Name,SU."."Photo from items I inner JOIN subcategory SU on I".".SubCategory=SU".".id where I".".Shop=".$shop."";
 $getsubcategories = $conn->query($subcategories);
 $getsubcategories->setFetchMode(PDO::FETCH_ASSOC);
 $MyJsonData1="";
