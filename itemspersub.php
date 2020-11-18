@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 	try{
 		if($customerid==""){
 $MyJsonData1="";
-$itemspersub="SELECT I."."id, I.itemname,I.itemnamear,'' as isfavorite,I.description,I.descriptionar,I.preparetime,I.timesamples,I.shop,S.shopname, I.photo,I.photo1,I.photo2, I.price, I.timesold,avg(F.rating) as rating,count(F.rating) as ratingnumber FROM items I left join feedback F on F.itemid=I.id  left join shop S on I.shop=S.id left join subcategory SU on I.subcategory=SU.id where I.subcategory=$subcategory GROUP By I.id";
+$itemspersub='SELECT I'.'.id, I.itemname,I.itemnamear," " as isfavorite,I.description,I.descriptionar,I.preparetime,I.timesamples,I.shop,S.shopname,S.shopnamear, I.photo,I.photo1,I.photo2, I.price, I.timesold,avg(F.Rating) as rating,count(F.Rating) as ratingnumber FROM items I left join favorites MF on MF.itemid=I.id left join feedback F on I.id=F.itemid left join shop S on I.shop=S.id WHERE I.subcategory=".$subcategory." GROUP By F.itemid';
 $getitemspersub = $conn->query($itemspersub);
 $getitemspersub->setFetchMode(PDO::FETCH_ASSOC);
 while($row = $getitemspersub->fetch()):
@@ -23,7 +23,7 @@ echo $MyJsonData1;
 echo ']';
 }elseif ($customerid!="") {
 $MyJsonData1="";
-$itemspersub="SELECT I."."id, I.itemname,I.itemnamear,MF.customerid as isfavorite,I.description,I.descriptionar,I.preparetime,I.timesamples, I.shop,S.shopname, I.photo,I.photo1,I.photo2, I.price, I.timesold,avg(F.rating) as rating,count(F.rating) as ratingnumber FROM items I left join favorites MF on MF.itemid=I.id left join feedback F on F.itemid=I.id  left join shop S on I.shop=S.id left join subcategory SU on I.subcategory=SU.id where I.subcategory=$subcategory GROUP By i.id";
+$itemspersub="SELECT I".".id, I.itemname,I.itemnamear,MF.customerid as isfavorite,I.description,I.descriptionar,I.preparetime,I.timesamples,I.shop,S.shopname,S.shopnamear, I.photo,I.photo1,I.photo2, I.price, I.timesold,avg(F.Rating) as rating,count(F.Rating) as ratingnumber FROM items I left join favorites MF on MF.itemid=I.id left join feedback F on I.id=F.itemid left join shop S on I.shop=S.id WHERE I.subcategory=".$subcategory." GROUP By F.itemid";
 $getitemspersub = $conn->query($itemspersub);
 $getitemspersub->setFetchMode(PDO::FETCH_ASSOC);
 while($row = $getitemspersub->fetch()):
@@ -34,7 +34,7 @@ $MyJsonData1=$MyJsonData1.",".$jsonrow;
 endwhile;
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
-$MyJsonData1 = preg_replace('/(?<="isfavorite":)(?!'.$customerid.').+?(?=,)/', '"NO"', $MyJsonData1);
+$MyJsonData1 = preg_replace('/(?<="isfavorite":")(?!'.$customerid.').+?(?=",)/', 'NO', $MyJsonData1);
 $MyJsonData1 = preg_replace('/(?<="isfavorite":")'.$customerid.'(?=")/', 'YES', $MyJsonData1);
 echo "[";
 echo $MyJsonData1;

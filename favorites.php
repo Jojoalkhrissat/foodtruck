@@ -4,7 +4,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 		$customerid=$_GET['customerid'];
 	try{
 $MyJsonData1="";
-$itemsperfav="SELECT I."."id,I.itemname,I.itemnamear,I.description,I.descriptionar,I.preparetime,I.timesamples,I.shop,I.photo,I.photo1,I.photo2,I.price,I.timesold,avg(F.rating) as rating,count(F.rating) as ratingnumber FROM items I left join feedback F on I.id=F.itemid ,favorites MF where MF.itemid=I.id and MF.customerid=$customerid GROUP By I.id";
+$itemsperfav="SELECT I".".id, I.itemname,I.itemnamear,MF.customerid as isfavorite,I.description,I.descriptionar,I.preparetime,I.timesamples,I.shop,S.shopname,S.shopnamear, I.photo,I.photo1,I.photo2, I.price, I.timesold,avg(F.Rating) as rating,count(F.Rating) as ratingnumber FROM items I left join favorites MF on MF.itemid=I.id left join feedback F on I.id=F.itemid left join shop S on I.shop=S.id where MF.itemid=I.id and MF.customerid=".$customerid." GROUP By F.itemid";
+
+
+
+
+
 $getitemsperfav = $conn->query($itemsperfav);
 $getitemsperfav->setFetchMode(PDO::FETCH_ASSOC);
 $count=$getitemsperfav->rowCount();
@@ -18,6 +23,8 @@ endwhile;
 $MyJsonData1=preg_replace('/"rating":null/', '"rating":"1"', $MyJsonData1);
 $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
+$MyJsonData1 = preg_replace('/(?<="isfavorite":").+?(?=")/', 'YES', $MyJsonData1);
+
 
 echo "[";
 echo $MyJsonData1;

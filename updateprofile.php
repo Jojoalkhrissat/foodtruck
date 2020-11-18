@@ -21,15 +21,6 @@ preg_match('/(?<=photopath=).+?(?=&|$)/',$post,$photopath);
 preg_match('/(?<=photo=).+?(?=&|$)/',$post,$photo);
 preg_match('/(?<=city=).+?(?=&|$)/',$post,$city);
 }
-if(!isset($photopath[0])||$photopath[0]==""){
-$photopath[0]="";
-}if(!isset($photo[0])||$photo[0]==""){
-$photo[0]="";
-}
-
-$usernamechange= 'UPDATE loginandregister SET username="'.$username[0].'" WHERE username="'.$username[0].'"'; 
-$updateusername= $conn->prepare($usernamechange);
-$updateusername->execute();
 
 $getuserinfo="SELECT id FROM customers where phonenumber='$phonenumberafter[0]'";
 $getuser = $conn->query($getuserinfo);
@@ -43,9 +34,26 @@ preg_match('/(?<=active":").+?(?=")/',$MyJsonData1,$active);
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData1,$id);
 
 
+
+if(isset($photopath[0])&&isset($photo)){
+if(!isset($photopath[0])||$photopath[0]==""||$photopath[0]=="null"||is_null($photopath[0])){
+$photopath[0]="";
+$photo[0]="";
+}if(!isset($photo[0])||$photo[0]==""||$photo[0]=="null"||is_null($photo[0])){
+$photopath[0]="";
+$photo[0]="";
+}
+
+$usernamechange= 'UPDATE loginandregister SET username="'.$username[0].'" WHERE username="'.$username[0].'"'; 
+$updateusername= $conn->prepare($usernamechange);
+$updateusername->execute();
+
+
+
+
 $myfile="";
 $contents="";
-if($photopath[0]!=""||!is_null($photopath[0])||$photopath[0]!=" "){
+
 $contents=base64_decode($photo[0]);
 switch (true) {
 	case stristr($photopath[0],"png"):
@@ -127,14 +135,17 @@ $updatecustomerinfo->execute();
 
 
 }else{
-	$customerinfo= 'UPDATE customers SET firstname="'.$firstname[0].'",lastname="'.$lastname[0].'",phonenumber="'.$phonenumberafter[0].'",city="'.$city[0].'" WHERE id="'.$id[0].'" ';
+	$usernamechange= 'UPDATE loginandregister SET username="'.$username[0].'" WHERE username="'.$username[0].'"'; 
+$updateusername= $conn->prepare($usernamechange);
+$updateusername->execute();
+$customerinfo= 'UPDATE customers SET firstname="'.$firstname[0].'",lastname="'.$lastname[0].'",phonenumber="'.$phonenumberafter[0].'",city="'.$city[0].'" WHERE id="'.$id[0].'" ';
 $updatecustomerinfo= $conn->prepare($customerinfo);
 $updatecustomerinfo->execute();
 
 }
 
 
-$getuserinfo="SELECT * FROM customers where phonenumber='$phonenumberafter[0]'";
+$getuserinfo="SELECT * FROM customers where id=".$id[0]."";
 $getuser = $conn->query($getuserinfo);
 $getuser->setFetchMode(PDO::FETCH_ASSOC);
 $MyJsonData1="";	

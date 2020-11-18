@@ -1,7 +1,7 @@
 <?php
 require "connect.php";
 
-	function TimeIsBetweenTwoTimes($from, $till, $input) {
+function TimeIsBetweenTwoTimes($from, $till, $input) {
     $f = DateTime::createFromFormat('H:i:s', $from);
     $t = DateTime::createFromFormat('H:i:s', $till);
     $i = DateTime::createFromFormat('H:i:s', $input);
@@ -10,22 +10,19 @@ require "connect.php";
 }
 
 
-echo "[";
-if ($_SERVER["REQUEST_METHOD"] == "GET"){
-	try{
-	
-		$shop=$_GET['shop'];
-$shops="SELECT S".".id,S.shopname,S.shopnamear,S.photo,S.location,S.opentime,S.closetime from shop S where S.id=".$shop." and S.active=1 GROUP by S.id";
+$shops='SELECT * FROM shop where active=1';
 $getshops = $conn->query($shops);
 $getshops->setFetchMode(PDO::FETCH_ASSOC);
-$MyJsonData1="";
+$MyJsonData="";
 $current_time=date("H:i:s",time());
+echo '[';
+$MyJsonData="";	
 while($row = $getshops->fetch()):
 $jsonrow=json_encode($row);
+
+$jsonrow=preg_replace('/(?<=shopnamear":").+?(?=")/',$row['shopnamear'], $jsonrow);
 preg_match('/(?<=opentime":").+?(?=")/',$jsonrow,$opentime);
 preg_match('/(?<=closetime":").+?(?=")/',$jsonrow,$closetime);
-$jsonrow=preg_replace('/(?<=shopnamear":").+?(?=")/',$row['shopnamear'], $jsonrow);
-
 if (TimeIsBetweenTwoTimes($current_time, $opentime[0], $closetime[0])){
 $jsonrow = preg_replace('/\}/', ',"available":"true"}', $jsonrow, 1);
 
@@ -33,32 +30,10 @@ $jsonrow = preg_replace('/\}/', ',"available":"true"}', $jsonrow, 1);
 else{
 $jsonrow = preg_replace('/\}/', ',"available":"false"}', $jsonrow, 1);
 }
-$MyJsonData1=$MyJsonData1.",".$jsonrow;
+$MyJsonData=$MyJsonData.",".$jsonrow;
 endwhile;
-
-
-
-
-
-
-
-
-
-
-
-$MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
-$MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
-echo $MyJsonData1;
+$MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
+$MyJsonData = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData);
+echo $MyJsonData;
 echo ']';
-}catch(Exception $e){
-
-http_response_code(400);
-echo "Bad request 400";
-}
-}else{
-http_response_code(400);
-echo "Bad request 400";
-
-}
-
 ?>

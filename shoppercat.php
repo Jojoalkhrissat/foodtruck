@@ -18,6 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 $shoppercat="SELECT S".".id,S.shopname,S.shopnamear,S.photo,S.location,S.opentime,S.closetime from shop S, subcategory SU WHERE S.id=SU.shop and SU.category=".$category." and S.active=1 GROUP by S.id";
 $getshoppercat = $conn->query($shoppercat);
 $getshoppercat->setFetchMode(PDO::FETCH_ASSOC);
+$count=$getshoppercat->rowCount();
+if($count>0){
 $MyJsonData1="";
 $current_time=date("H:i:s",time());
 while($row = $getshoppercat->fetch()):
@@ -50,8 +52,19 @@ $MyJsonData1=$MyJsonData1.",".$jsonrow;
 
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
+
+}else{
+$MyJsonData1='[{"message":"there are no food trucks for this category"}]';
+http_response_code(404);
+}
+
 echo $MyJsonData1;
+
 echo ']';
+
+
+
+
 }catch(Exception $e){
 
 http_response_code(400);
