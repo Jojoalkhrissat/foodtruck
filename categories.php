@@ -6,9 +6,12 @@ $getcategories->setFetchMode(PDO::FETCH_ASSOC);
 echo '[';
 $MyJsonData="";	
 while($row = $getcategories->fetch()):
-$MyJsonData=$MyJsonData.",".json_encode($row);
+$jsonrow=json_encode($row);
+$jsonrow=preg_replace('/(?<=catnamear":").+?(?=")/',$row['catnamear'], $jsonrow);
+$MyJsonData=$MyJsonData.",".$jsonrow;
 endwhile;
 $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
+$MyJsonData = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData);
 echo $MyJsonData;
 echo ']';
 ?>

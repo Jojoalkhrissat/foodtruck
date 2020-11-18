@@ -10,7 +10,7 @@ preg_match('/(?<=itemid=).+?(?=&|$)/',$post,$itemid);
 preg_match('/(?<=customerid=).+?(?=&|$)/',$post,$customerid);
 }
 $MyJsonData="";	
-$favorites= "INSERT INTO `favorites`(`ItemId`,`CustomerId`) VALUES ($itemid[0],$customerid[0])";
+$favorites= "INSERT INTO `favorites`(`itemid`,`customerid`) VALUES ($itemid[0],$customerid[0])";
 $stmt= $conn->prepare($favorites);
 $stmt->execute();
 $isinserted= $stmt->rowCount();

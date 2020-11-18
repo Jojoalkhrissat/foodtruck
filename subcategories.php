@@ -5,13 +5,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 	try{
 $MyJsonData1="";
 echo "[";
-$subcategories="SELECT `id`, `Name`, `Photo` FROM `subcategory` where Category='$category'";
+$subcategories="SELECT `id`, `subcatname`,`subcatnamear`, `photo` FROM `subcategory` where category='$category'";
 $getsubcategories = $conn->query($subcategories);
 $getsubcategories->setFetchMode(PDO::FETCH_ASSOC);
 while($row = $getsubcategories->fetch()):
-$MyJsonData1=$MyJsonData1.",".json_encode($row);
+$jsonrow=json_encode($row);
+$jsonrow=preg_replace('/(?<=subcatnamear":").+?(?=")/',$row['subcatnamear'], $jsonrow);
+$MyJsonData1=$MyJsonData1.",".$jsonrow;
 endwhile;
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
+$MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
 echo $MyJsonData1;
 echo ']';
 }catch(Exception $e){

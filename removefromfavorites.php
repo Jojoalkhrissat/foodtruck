@@ -11,7 +11,7 @@ preg_match('/(?<=itemid=).+?(?=&|$)/',$post,$itemid);
 preg_match('/(?<=customerid=).+?(?=&|$)/',$post,$customerid);
 }
 $MyJsonData="";	
-$favorites= "DELETE FROM `favorites` WHERE ItemId=$itemid[0] AND CustomerId=$customerid[0]";
+$favorites= "DELETE FROM `favorites` WHERE itemid=$itemid[0] AND customerid=$customerid[0]";
 $stmt= $conn->prepare($favorites);
 $stmt->execute();
 $isinserted= $stmt->rowCount();

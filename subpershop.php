@@ -4,14 +4,17 @@ echo "[";
 if ($_SERVER["REQUEST_METHOD"] == "GET"){
 	try{
 		$shop=$_GET['shop'];
-$subcategories="SELECT I."."SubCategory as subcategory, SU."."Name,SU."."Photo from items I inner JOIN subcategory SU on I".".SubCategory=SU".".id where I".".Shop=".$shop."";
+$subcategories="SELECT SU."."id , SU.subcatname,SU.subcatnamear,SU.photo from subcategory SU where SU.shop=".$shop."";
 $getsubcategories = $conn->query($subcategories);
 $getsubcategories->setFetchMode(PDO::FETCH_ASSOC);
 $MyJsonData1="";
 while($row = $getsubcategories->fetch()):
-$MyJsonData1=$MyJsonData1.",".json_encode($row);
+$jsonrow=json_encode($row);
+$jsonrow=preg_replace('/(?<=subcatnamear":").+?(?=")/',$row['subcatnamear'], $jsonrow);
+$MyJsonData1=$MyJsonData1.",".$jsonrow;
 endwhile;
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
+$MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
 echo $MyJsonData1;
 echo ']';
 }catch(Exception $e){

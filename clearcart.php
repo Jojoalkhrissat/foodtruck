@@ -3,16 +3,25 @@ require "connect.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	try{
 	$post = file_get_contents("php://input");
-preg_match('/(?<=customerid":").+?(?=")/',$post,$customerid);
-if(!isset($customerid[0])){
-preg_match('/(?<=customerid=).+?(?=&|$)/',$post,$customerid);
+preg_match('/(?<=orderid":").+?(?=")/',$post,$orderid);
+if(!isset($orderid[0])){
+preg_match('/(?<=orderid=).+?(?=&|$)/',$post,$orderid);
 }
-$MyJsonData="";	
-$clearcart= "DELETE from orders where Customer=$customerid[0] and WhereOrder='CART'";
+$clearcart= "DELETE from orderelements where ordernumber=$orderid[0]";
 $stmt= $conn->prepare($clearcart);
 $stmt->execute();
-$isinserted=$stmt->rowCount();
-if($isinserted>0){
+
+
+
+
+
+
+$MyJsonData="";	
+$deletecart= "DELETE from orders where id=$orderid[0]";
+$stamt= $conn->prepare($deletecart);
+$stamt->execute();
+$isdeleted=$stamt->rowCount();
+if($isdeleted>0){
 echo '{"Message":"Cart emptied"}';
 
 

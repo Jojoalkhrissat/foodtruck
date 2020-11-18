@@ -7,14 +7,18 @@ if($customerid!=""){
 try{
 	$MyJsonData="";
 $MyJsonData1="";
-$cartitems="SELECT O."."id, O.shop, O.Item, O.Count, O.WhereOrder,I.Name, I.Photo, I.price*O.Count as Price FROM orders O inner join items I on I.id=O.Item WHERE O.WhereOrder='CART' and O.Customer=$customerid";
+$cartitems="SELECT O".".id, O.shop, OE.item, OE.count, O.status,I.itemname,I.itemnamear, I.photo, I.price*OE.count as price FROM orderelements OE inner join items I on I.id=OE.item join orders O on O.id=OE.ordernumber WHERE O.status='CART' and O.customer="$customerid"";
 $getcartitems = $conn->query($cartitems);
 $getcartitems->setFetchMode(PDO::FETCH_ASSOC);
 $resultcount=$getcartitems->rowCount();
 while($row = $getcartitems->fetch()):
-$MyJsonData1=$MyJsonData1.",".json_encode($row);
+$jsonrow=json_encode($row);
+$jsonrow=preg_replace('/(?<=itemnamear":").+?(?=")/',$row['itemnamear'], $jsonrow);
+$jsonrow=preg_replace('/(?<=descriptionar":").+?(?=")/',$row['descriptionar'], $jsonrow);
+$MyJsonData1=$MyJsonData1.",".$jsonrow;
 endwhile;
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
+$MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
 
 echo "[";
 echo $MyJsonData1;

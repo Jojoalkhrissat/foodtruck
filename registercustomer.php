@@ -10,11 +10,12 @@ preg_match('/(?<=lastname":").+?(?=")/',$post,$lastname);
 preg_match('/(?<=email":").+?(?=")/',$post,$email);
 preg_match('/(?<=phonenumber":").+?(?=")/',$post,$phonenumber);
 preg_match('/(?<=photopath":").+?(?=")/',$post,$photopath);
-preg_match('/(?<=photopath1":").+?(?=")/',$post,$photopath1);
+preg_match('/(?<=photo":").+?(?=")/',$post,$photo);
 preg_match('/(?<=gender":").+?(?=")/',$post,$gender);
+preg_match('/(?<=city":").+?(?=")/',$post,$city);
 preg_match('/(?<=address":").+?(?=")/',$post,$address);
 preg_match('/(?<=dob":").+?(?=")/',$post,$dob);
-
+$username=$phonenumber;
 if(!isset($username[0])&&!isset($password[0])&&!isset($firstname[0])&&!isset($lastname[0])&&!isset($email[0])&&!isset($gender[0])&&!isset($dob[0])){
 preg_match('/(?<=username=).+?(?=&|$)/',$post,$username);
 preg_match('/(?<=password=).+?(?=&|$)/',$post,$password);
@@ -23,24 +24,23 @@ preg_match('/(?<=lastname=).+?(?=&|$)/',$post,$lastname);
 preg_match('/(?<=email=).+?(?=&|$)/',$post,$email);
 preg_match('/(?<=phonenumber=).+?(?=&|$)/',$post,$phonenumber);
 preg_match('/(?<=photopath=).+?(?=&|$)/',$post,$photopath);
-preg_match('/(?<=photopath1=).+?(?=&|$)/',$post,$photopath1);
+preg_match('/(?<=photo=).+?(?=&|$)/',$post,$photo);
 preg_match('/(?<=gender=).+?(?=&|$)/',$post,$gender);
+preg_match('/(?<=city=).+?(?=&|$)/',$post,$city);
 preg_match('/(?<=address=).+?(?=&|$)/',$post,$address);
 preg_match('/(?<=dob=).+?(?=&|$)/',$post,$dob);
-}
-if(!isset($phonenumber[0])||$phonenumber[0]==""){
-$phonenumber[0]="";
+$username=$phonenumber;
 }
 if(!isset($photopath[0])||$photopath[0]==""){
 $photopath[0]="";
-}if(!isset($photopath1[0])||$photopath1[0]==""){
-$photopath1[0]="";
+}if(!isset($photo[0])||$photo[0]==""){
+$photo[0]="";
 }
 if(!isset($address[0])||$address[0]==""){
 $address[0]="";
 }
 if(isset($username[0])&&isset($password[0])&&isset($firstname[0])&&isset($lastname[0])&&isset($email[0])&&isset($gender[0])&&isset($dob[0])){
-$userinfo= "INSERT INTO `customers`(`FName`, `LName`, `Email`, `PhoneNumber`,`Address`,`DOB`,`Gender`,`Photo`) VALUES ('$firstname[0]','$lastname[0]','$email[0]','$phonenumber[0]','$address[0]','$dob[0]','$gender[0]','$photopath[0]')";
+$userinfo= "INSERT INTO `customers`(`firstname`, `lastname`, `email`, `phonenumber`,`address`,`dateofbirth`,`gender`,`city`) VALUES ('$firstname[0]','$lastname[0]','$email[0]','$phonenumber[0]','$address[0]','$dob[0]','$gender[0]','$city[0]')";
 $stmt= $conn->prepare($userinfo);
 $isinserted=$stmt->execute();
 if($isinserted){
@@ -58,7 +58,7 @@ preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 $myfile="";
 $contents="";
 if($photopath[0]!=""){
-$contents=base64_decode($photopath1[0]);
+$contents=base64_decode($photo[0]);
 switch (true) {
 	case stristr($photopath[0],"png"):
 		$myfile = "img/profile/customer/".$id[0].".png";		
@@ -121,15 +121,15 @@ file_put_contents($myfile,$contents);
 
 $MyJsonData = preg_replace('/Photo":".+?"/', 'Photo":"'.$myfile.'"', $MyJsonData);
 
-$adminphoto= 'UPDATE customers set Photo="'.$myfile.'" where Email="'.$email[0].'"'; 
+$adminphoto= 'UPDATE customers set Photo="'.$myfile.'" where phonenumber="'.$phonenumber[0].'"'; 
 $photoupdate= $conn->prepare($adminphoto);
 $photoupdate->execute();
-$fetchuserinfo='SELECT * FROM customers WHERE Email="'.$email[0].'"';
+$fetchuserinfo='SELECT * FROM customers WHERE phonenumber="'.$phonenumber[0].'"';
 $getuser = $conn->query($fetchuserinfo);
 $getuser->setFetchMode(PDO::FETCH_ASSOC);
 
 $MyJsonData1="";
-$userlogin="INSERT INTO `loginandregister`(`CustomerId`, `UserName`, `PassWord`, `UserType`) VALUES ('$id[0]','$username[0]','$password[0]','CUSTOMER')";
+$userlogin="INSERT INTO `loginandregister`(`customerid`, `username`, `password`, `usertype`) VALUES ('$id[0]','$username[0]','$password[0]','CUSTOMER')";
 $stmt1= $conn->prepare($userlogin);
 $stmt1->execute();
 $fetuserid='SELECT * FROM loginandregister WHERE CustomerId="'.$id[0].'"';

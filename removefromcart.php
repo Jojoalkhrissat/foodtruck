@@ -14,7 +14,7 @@ preg_match('/(?<=count=).+?(?=&|$)/',$post,$count);
 if(isset($count[0])&&isset($customerid[0])&&isset($itemid[0])){
 $MyJsonData1="";
 $MyJsonData="";	
-$itemspersub="SELECT id,Count FROM `orders` WHERE Item=".$itemid[0]." and Customer=".$customerid[0]."";
+$itemspersub="SELECT id,count FROM `orders` WHERE Item=".$itemid[0]." and customer=".$customerid[0]." and whereorder='CART'";
 $getitemspersub = $conn->query($itemspersub);
 $getitemspersub->setFetchMode(PDO::FETCH_ASSOC);
 while($row = $getitemspersub->fetch()):
@@ -26,14 +26,14 @@ preg_match('/(?<=Count":").+?(?=")/',$MyJsonData,$Count);
 if(isset($Count[0])){
 if($Count[0]==$count[0]){
 
-$addtocart= 'DELETE FROM `orders` WHERE id='.$id[0].' ';
+$addtocart= 'DELETE FROM `orders` WHERE id='.$id[0].'and whereorder="CART" ';
 $stmt= $conn->prepare($addtocart);
 $stmt->execute();
 $isinserted= $stmt->rowCount();
 
 }elseif($Count[0]>$count[0]){
 	$count[0]=$Count[0]-$count[0];
-$updatecount= 'UPDATE orders set count='.$count[0].' where id='.$id[0].'';
+$updatecount= 'UPDATE orders set count='.$count[0].' where id='.$id[0].' and whereorder="CART"';
 $stmt= $conn->prepare($updatecount);
 $stmt->execute();
 $isinserted= $stmt->rowCount();
