@@ -54,7 +54,7 @@ $jsonrow=json_encode($row);
 preg_match('/(?<=opentime":").+?(?=")/',$jsonrow,$opentime);
 preg_match('/(?<=closetime":").+?(?=")/',$jsonrow,$closetime);
 preg_match('/(?<=location":").+?(?=\")/',$jsonrow,$location);
-$distance=0;
+$distance=10000;
 if(isset($location[0])){
 
 

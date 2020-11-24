@@ -1,4 +1,5 @@
 <?php
+require "../connect.php";
 if(isset($_POST["submit"])) {
 $shop= $_POST["shops"];
 $subcatname= $_POST["subcatname"];
@@ -10,12 +11,12 @@ echo $subcatnamear;
 
 
 
-$subcat= 'INSERT INTO `subcategory`(`subcatname`, `subcatnamear`, `shop`, `category`) VALUES ('.$subcatname.','.$subcatnamear.','.$shop.','.$category.')';
+$subcat= 'INSERT INTO `subcategory`(`subcatname`, `subcatnamear`, `shop`, `category`) VALUES ("'.$subcatname.'","'.$subcatnamear.'","'.$shop.'","'.$category.'")';
 $createsubcat= $conn->prepare($subcat);
 $createsubcat->execute();
 $count=$createsubcat->rowCount();
 
-if($count==1){
+
 echo '[{"message":"your review was entered"}]';	
 
 
@@ -43,11 +44,6 @@ endwhile;
 
 
 
-}else{
-http_response_code(400);
-	echo '[{"message":"something went wrong"}]';	
-
-}
 
 
 
@@ -76,10 +72,11 @@ http_response_code(400);
 
 
 
-if(file_exists($_FILES['image']['tmp_name']){
+
+if(file_exists($_FILES['subcatimage']['tmp_name'])){
 
 
-$target_dir = "../img/subcategory";
+$target_dir = "../img/subcategory/";
 
 $uploadOk = 1;
 
@@ -88,9 +85,9 @@ $uploadOk = 1;
 
   $check = getimagesize($_FILES["subcatimage"]["tmp_name"]);
   if($check !== false) {
-    echo "File is an image - " . $check["mime"] . ".";
-    echo "<br>";
-    echo $check["mime"];
+    // echo "File is an image - " . $check["mime"] . ".";
+    // echo "<br>";
+    // echo $check["mime"];
 
 
 
@@ -101,7 +98,7 @@ $uploadOk = 1;
   }
 }
 preg_match('/(?<=\/).+?(?=$)/',$check["mime"],$ext);
-echo $ext[0];
+// echo $ext[0];
 
 $target_file = $target_dir . basename('abc'.'.'.$ext[0]);
 

@@ -13,27 +13,38 @@ preg_match('/(?<=customerid=).+?(?=&|$)/',$post,$customerid);
 preg_match('/(?<=comments=).+?(?=&|$)/',$post,$comments);
 preg_match('/(?<=rating=).+?(?=&|$)/',$post,$rating);
 }
+$newrating=$rating[0]*2;
+$newrating=intval($newrating);
+
+
+$categories='SELECT * FROM `feedback` WHERE itemid='.$itemid[0].' and customer='.$customerid[0].'';
+$getcategories = $conn->query($categories);
+$getcategories->setFetchMode(PDO::FETCH_ASSOC);
+$count=$getcategories->rowCount();
+if($count==0){
 
 
 
-
-
-
-$rating= 'INSERT INTO `feedback`(`itemid`, `customer`, `type`, `comments`, `rating`, `date`) VALUES ("'.$itemid[0].'","'.$customerid[0].'","ITEM","'.$comments[0].'","'.$rating[0].'"';
-$createrating= $conn->prepare($rating);
+$rate= 'INSERT INTO `feedback`(`itemid`, `customer`, `type`, `comments`, `rating`) VALUES ("'.$itemid[0].'","'.$customerid[0].'","ITEM","'.$comments[0].'","'.$newrating.'")';
+$createrating= $conn->prepare($rate);
 $createrating->execute();
-$count=$createrating->rowCount();
 
-if($count==1){
-echo '[{"message":"your review was entered"}]';	
+
+echo '[{"message":"your rating was added"}]';	
+
+
+
+
+
+
+
+
 }else{
-http_response_code(400);
-	echo '[{"message":"something went wrong"}]';	
+http_response_code(401);
+	echo '[{"message":"you can\'t add more than 1 review"}]';
+
 
 }
-
-
-
 }catch(Exception $e){
 http_response_code(400);
 	echo '[{"message":"something went wrong"}]';	

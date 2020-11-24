@@ -2,12 +2,16 @@
 require "connect.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	try{
-	$post = file_get_contents("php://input");
-preg_match('/(?<=orderid":").+?(?=")/',$post,$orderid);
-if(!isset($orderid[0])){
-preg_match('/(?<=orderid=).+?(?=&|$)/',$post,$orderid);
+		$post = file_get_contents("php://input");
+preg_match('/(?<=cartid":").+?(?=")/',$post,$cartid);
+
+if(!isset($cartid[0])||$cartid[0]==""||$cartid[0]==" "){
+preg_match('/(?<=cartid=).+?(?=&|$)/',$post,$cartid);
 }
-$clearcart= "DELETE from orderelements where ordernumber=$orderid[0]";
+
+
+if(isset($cartid[0])||$cartid[0]!=""||$cartid[0]!=" "){
+$clearcart= "DELETE from orderelements where ordernumber=".$cartid[0]."";
 $stmt= $conn->prepare($clearcart);
 $stmt->execute();
 
@@ -16,12 +20,11 @@ $stmt->execute();
 
 
 
-$MyJsonData="";	
-$deletecart= "DELETE from orders where id=$orderid[0]";
+
+$deletecart= "DELETE from orders where id=".$cartid[0]."";
 $stamt= $conn->prepare($deletecart);
 $stamt->execute();
-$isdeleted=$stamt->rowCount();
-if($isdeleted>0){
+
 echo '{"Message":"Cart emptied"}';
 
 
@@ -33,7 +36,13 @@ echo '{"Message":"Cart is already empty"}';
 	}
 
 }catch(Exception $e){
+http_response_code(400);
+echo '{"Message":"Cart was not emptied"}';
+}
+}else{
+	http_response_code(400);
+echo '{"Message":"Cart was not emptied"}';
 
 }
-}
+
 ?>

@@ -3,24 +3,24 @@ require "connect.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 $post = file_get_contents('php://input');
-echo $post;
+
 preg_match('/(?<=username":").+?(?=")/',$post,$username);
 preg_match('/(?<=password":").+?(?=")/',$post,$password);
 if(!isset($username[0])&&!isset($password[0])){
 preg_match('/(?<=username=).+?(?=&|$)/',$post,$username);
 preg_match('/(?<=password=).+?(?=&|$)/',$post,$password);
 }
-$checkuser ="SELECT id,usertype,adminid,customerid,driverid FROM `loginandregister` WHERE username='$username[0]' AND password='$password[0]'";
-echo $checkuser;
+$checkuser ="SELECT id,usertype,adminid,customerid,driverid,shopid FROM `loginandregister` WHERE username='$username[0]' AND password='$password[0]'";
 $user = $conn->query($checkuser);
 $user->setFetchMode(PDO::FETCH_ASSOC);
 $count=$user->rowCount();
 if($count==1){
-echo '[';
+
 $MyJsonData="";	
 while($row = $user->fetch()):
 $MyJsonData=$MyJsonData.",".json_encode($row);
 endwhile;
+
 $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
 
 preg_match('/(?<=usertype":").+?(?=")/',$MyJsonData,$usertype);
@@ -51,13 +51,16 @@ $getuser = $conn->query($getuserinfo);
 $getuser->setFetchMode(PDO::FETCH_ASSOC);
 $MyJsonData1="";	
 while($row = $getuser->fetch()):
-$MyJsonData1=$MyJsonData1.",".json_encode($row);
+	$photo= $row['photo'];
+$jsonrow=json_encode($row);
+$jsonrow=preg_replace('/(?<=shopnamear":").+?(?=")/', $row['shopnamear'], $jsonrow);
+$MyJsonData1=$MyJsonData1.",".$jsonrow;
 endwhile;
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 preg_match('/(?<=active":").+?(?=")/',$MyJsonData1,$active);
 if($active=1){
 
-echo $MyJsonData1;
+
 }else
 {
 	http_response_code(401);
@@ -67,7 +70,7 @@ echo $MyJsonData1;
 
 
 
-echo "]";
+
 }else{
 	http_response_code(401);
 	echo '[{"message":"Wrong phone number or password"}]';
@@ -82,3 +85,28 @@ echo "400 error bad request";
 	echo "400 error bad request";
 }
 ?>
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="login.css">
+</head>
+<body>
+<div class="navbar">
+	<div id="logo">
+  <a class="logo" href="#">FoodTruck</a>
+  </div>
+  <ul class="nav">
+    <li><a href="#">profile</a></li>
+    <li><a href="#">subcategories</a></li>
+    <li><a href="#">items</a></li>
+    <li><a href="#">sales</a></li>
+  </ul>
+</div>
+<img src="../../<?php echo $photo; ?>" width="5%" height="5%">
+</body>
+</html>

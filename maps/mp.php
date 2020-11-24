@@ -1,84 +1,56 @@
-<!DOCTYPE html>
 <html>
-<head>
-  
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.css" />
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+        <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=lI3pta3b3Si2yoUgQyaq0KNyTU1TuvAA"></script>
+
+        <script type="text/javascript">
+            window.onload = function() {
+                var popup = L.popup();
+                var geolocationMap = L.map('map', {
+                    layers: MQ.mapLayer(),
+                    center: [40.731701, -73.993411],
+                    zoom: 12
+                });
+
+                function geolocationErrorOccurred(geolocationSupported, popup, latLng) {
+
+                    popup.setLatLng(latLng);
+                    popup.setContent(geolocationSupported ?
+                            '<b>Error:</b> The Geolocation service failed.' :
+                            '<b>Error:</b> This browser doesn\'t support geolocation.');
+                    popup.openOn(geolocationMap);
+                }
 
 
-</head>
-<body>
-  
-  <div id="google_map" style="width:800px;height:400px;"></div>
-  <script type="text/javascript" src="http://www.google.com/jsapi?key=<%=google_map_api_key%>"></script>
-<script type="text/javascript">
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                       
+                        var latLng = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                            
+                        };
+console.log(position);
+                        popup.setLatLng(latLng);
+                        popup.setContent(position.coords);
+                        popup.openOn(geolocationMap);
 
-  var LATITUDE_ELEMENT_ID = "course_latitude";
-  var LONGITUDE_ELEMENT_ID = "course_longitude";
-  var MAP_DIV_ELEMENT_ID = "google_map";
+                        geolocationMap.setView(latLng);
+                    }, function() {
+                        geolocationErrorOccurred(true, popup, geolocationMap.getCenter());
+                    });
+                } else {
+                    //No browser support geolocation service
+                    geolocationErrorOccurred(false, popup, geolocationMap.getCenter());
+                }
+            }
 
-  var DEFAULT_ZOOM_WHEN_NO_COORDINATE_EXISTS = 1;
-  var DEFAULT_CENTER_LATITUDE = 22;
-  var DEFAULT_CENTER_LONGITUDE = 13;
-  var DEFAULT_ZOOM_WHEN_COORDINATE_EXISTS = 15;
+        </script>
+    </head>
 
-  // This is the zoom level required to position the marker
-  var REQUIRED_ZOOM = 15;
-
-  google.load("maps", "2.x");
-
-  // The google map variable
-  var map = null;
-
-  // The marker variable, when it is null no marker has been added
-  var marker = null;
-
-  function initializeGoogleMap() {
-    map = new google.maps.Map2(document.getElementById(MAP_DIV_ELEMENT_ID));
-    map.addControl(new GLargeMapControl());
-    map.addControl(new GMapTypeControl());
-
-    map.setMapType(G_NORMAL_MAP);
-
-    var latitude = +document.getElementById(LATITUDE_ELEMENT_ID).value;
-    var longitude = +document.getElementById(LONGITUDE_ELEMENT_ID).value;
-
-    if(latitude != 0 && longitude != 0) {
-      //We have some sort of starting position, set map center and marker
-      map.setCenter(new google.maps.LatLng(latitude, longitude), DEFAULT_ZOOM_WHEN_COORDINATE_EXISTS);
-      var point = new GLatLng(latitude, longitude);
-      marker = new GMarker(point, {draggable:false});
-      map.addOverlay(marker);
-    } else {
-      // Just set the default center, do not add a marker
-      map.setCenter(new google.maps.LatLng(DEFAULT_CENTER_LATITUDE, DEFAULT_CENTER_LONGITUDE), DEFAULT_ZOOM_WHEN_NO_COORDINATE_EXISTS);
-    }
-
-    GEvent.addListener(map, "click", googleMapClickHandler);
-  }
-
-
-  function googleMapClickHandler(overlay, latlng, overlaylatlng) {
-
-    if(map.getZoom() < REQUIRED_ZOOM) {
-      alert("<%= :you_must_zoom_in_closer_to_position_the_course_accurately.l %>" );
-      return;
-    }
-    if(marker == null) {
-      marker = new GMarker(latlng, {draggable:false});
-      map.addOverlay(marker);
-    }
-    else {
-      marker.setLatLng(latlng);
-    }
-
-    document.getElementById(LATITUDE_ELEMENT_ID).value = latlng.lat();
-    document.getElementById(LONGITUDE_ELEMENT_ID).value = latlng.lng();
-
-  }
-
-  google.setOnLoadCallback(initializeGoogleMap);
-
-
-
-</script>
-</body>
+    <body style='border:0; margin: 0'>
+        <div id='map' style='width: 100%; height:530px;'></div>
+    </body>
 </html>
