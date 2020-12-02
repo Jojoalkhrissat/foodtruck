@@ -1,43 +1,31 @@
 <?php
 require "connect.php";
+require "sql.php";
+require "functions.php";
 
-	function TimeIsBetweenTwoTimes($from, $till, $input) {
-    $f = DateTime::createFromFormat('H:i:s', $from);
-    $t = DateTime::createFromFormat('H:i:s', $till);
-    $i = DateTime::createFromFormat('H:i:s', $input);
-    if ($f > $t) $t->modify('+1 day');
-	return ($f <= $i && $i <= $t) || ($f <= $i->modify('+1 day') && $i <= $t);
-}
+	
 
 
-echo "[";
+
 if ($_SERVER["REQUEST_METHOD"] == "GET"){
 	try{
 	
 		$shop=$_GET['shop'];
 $shops="SELECT S".".id,S.shopname,S.shopnamear,S.photo,S.location,S.opentime,S.closetime from shop S where S.id=".$shop." and S.active=1 GROUP by S.id";
-$getshops = $conn->query($shops);
-$getshops->setFetchMode(PDO::FETCH_ASSOC);
-$MyJsonData1="";
-$current_time=date("H:i:s",time());
-while($row = $getshops->fetch()):
-$jsonrow=json_encode($row);
-preg_match('/(?<=opentime":").+?(?=")/',$jsonrow,$opentime);
-preg_match('/(?<=closetime":").+?(?=")/',$jsonrow,$closetime);
-$jsonrow=preg_replace('/(?<=shopnamear":").+?(?=")/',$row['shopnamear'], $jsonrow);
+$MyJsonData1=sql_selectdata($shops,$conn);
+preg_match_all('/(?<=opentime":").+?(?=")/',$MyJsonData1,$opentime);
+preg_match_all('/(?<=closetime":").+?(?=")/',$MyJsonData1,$closetime);
+for ($i=0; $i <count($opentime[0]) ; $i++) { 
+	# code...
 
-if (TimeIsBetweenTwoTimes($current_time, $opentime[0], $closetime[0])){
-$jsonrow = preg_replace('/\}/', ',"available":"true"}', $jsonrow, 1);
+if (TimeIsBetweenTwoTimes($current_time, $opentime[0][$i], $closetime[0][$i])){
+$MyJsonData1 = preg_replace('/\}/', ',"available":"true"}', $MyJsonData1, $i+1);
 
 }
 else{
-$jsonrow = preg_replace('/\}/', ',"available":"false"}', $jsonrow, 1);
+$MyJsonData1 = preg_replace('/\}/', ',"available":"false"}', $MyJsonData1, $i+1);
 }
-$MyJsonData1=$MyJsonData1.",".$jsonrow;
-endwhile;
-
-
-
+}
 
 
 
@@ -48,6 +36,7 @@ endwhile;
 
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
+echo "[";
 echo $MyJsonData1;
 echo ']';
 }catch(Exception $e){

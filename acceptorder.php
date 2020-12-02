@@ -1,5 +1,6 @@
 <?php
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 preg_match('/(?<=orderid":").+?(?=")/',$post,$orderid);
 
@@ -7,13 +8,10 @@ if(!isset($customerid[0])){
 preg_match('/(?<=orderid=).+?(?=&|$)/',$post,$orderid);
 }
 $fetchadmininfo='SELECT * FROM orders WHERE id="'.$orderid[0].'"';
-$getuser = $conn->query($fetchadmininfo);
-$getuser->setFetchMode(PDO::FETCH_ASSOC);
+
 echo '[';
-$MyJsonData="";	
-while($row = $getuser->fetch()):
-$MyJsonData=$MyJsonData.",".json_encode($row);
-endwhile;
+$MyJsonData=sql_selectdata($fetchadmininfo,$conn);	
+
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 preg_match('/(?<=timeforready":").+?(?=")/',$MyJsonData,$timeforready);
 $minutes_to_add=intval($timeforready[0]);
@@ -24,10 +22,7 @@ $enddate=strtotime(''.$strdate.' +'.$minutes_to_add.' minutes')
 $ordertime=date("Y-m-d h:i:s",$enddate);
 
 $order= 'UPDATE orders SET status="ACCEPTED",orderstart='.'CURRENT_TIME,orderend="'.$ordertime.',ordertotaltime="'.$ordertotaltime.'" " WHERE id="'.$orderid[0].''; 
-$dispatchorder= $conn->prepare($order);
-$dispatchorder->execute();
-$isupdated= $dispatchorder->rowCount();
-
+sql_update($order,$conn);
 
 if($isupdated>0){
 echo '[{"message":"Your order will be ready at '.$ordertime.'":"'.$ordertime.'"}]';

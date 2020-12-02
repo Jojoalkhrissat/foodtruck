@@ -1,5 +1,6 @@
 <?php
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 
@@ -20,13 +21,8 @@ preg_match('/(?<=couponcode=).+?(?=&|$)/',$post,$couponcode);
 
 
 $getcouponid='SELECT * FROM coupons WHERE couponcode="'.$couponcode[0].'"';
-$getcoupon = $conn->query($getcouponid);
-$getcoupon->setFetchMode(PDO::FETCH_ASSOC);
-$count=$getcoupon->rowCount();
-$MyJsonData="";	
-while($row = $getcoupon->fetch()):
-$MyJsonData=$MyJsonData.",".json_encode($row);
-endwhile;
+$MyJsonData=sql_selectdata($getcouponid,$conn);
+$count=sql_selectcount($getcouponid,$conn);
  $MyJsonData=preg_replace('/,/', '', $MyJsonData, 1);
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 preg_match('/(?<=validdatestart":").+?(?=")/',$MyJsonData,$validdatestart);
@@ -35,14 +31,10 @@ preg_match('/(?<=validdateend":").+?(?=")/',$MyJsonData,$validdateend);
 
 if($count>0){
 $checkcoupon='SELECT * FROM orders WHERE coupon="'.$id[0].'" and customer="'.$customerid[0].'"';
-$checkcouponapplied = $conn->query($checkcoupon);
-$checkcouponapplied->setFetchMode(PDO::FETCH_ASSOC);
-$coupounappliedbefore=$checkcouponapplied->rowCount();
-$MyJsonData1="";	
-while($row = $checkcouponapplied->fetch()):
-$MyJsonData1=$MyJsonData1.",".json_encode($row);
 
-endwhile;
+$coupounappliedbefore=sql_selectcount($checkcoupon,$conn);
+$MyJsonData1=sql_selectdata($checkcoupon,$conn);	
+
  $MyJsonData1=preg_replace('/,/', '', $MyJsonData1, 1);
 
 if($coupounappliedbefore==0){
@@ -54,9 +46,7 @@ if($coupounappliedbefore==0){
 
 
 
-// $addcoupon= 'UPDATE orders set coupon="'.$id[0].'" where customer="'.$customerid[0].'" and status="CART"'; 
-// $applycoupon= $conn->prepare($addcoupon);
-// $applycoupon->execute();
+
 
    
 // $currentDate = date('Y-m-d');
@@ -67,6 +57,9 @@ if($coupounappliedbefore==0){
    
 // if (($currentDate >= $startDate) && ($currentDate <= $endDate)){
 //     $MyJsonData=preg_replace('/\}/', ',"valid":"true"}', $MyJsonData, 1);
+	// $addcoupon= 'UPDATE orders set coupon="'.$id[0].'" where customer="'.$customerid[0].'" and status="CART"'; 
+// $applycoupon= $conn->prepare($addcoupon);
+// $applycoupon->execute();
 // }else{
 //     $MyJsonData=preg_replace('/\}/', ',"valid":"false"}', $MyJsonData, 1);
 // }

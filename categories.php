@@ -1,17 +1,12 @@
 <?php
 require "connect.php";
+require "sql.php";
 $categories='SELECT * FROM category';
-$getcategories = $conn->query($categories);
-$getcategories->setFetchMode(PDO::FETCH_ASSOC);
-echo '[';
-$MyJsonData="";	
-while($row = $getcategories->fetch()):
-$jsonrow=json_encode($row);
-$jsonrow=preg_replace('/(?<=catnamear":").+?(?=")/',$row['catnamear'], $jsonrow);
-$MyJsonData=$MyJsonData.",".$jsonrow;
-endwhile;
+$MyJsonData =sql_selectdata($categories,$conn);
+
 $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
 $MyJsonData = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData);
+echo '[';
 echo $MyJsonData;
 echo ']';
 ?>

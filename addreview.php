@@ -1,5 +1,6 @@
 <?php
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 $post = file_get_contents("php://input");
@@ -17,17 +18,16 @@ $newrating=$rating[0]*2;
 $newrating=intval($newrating);
 
 
-$categories='SELECT * FROM `feedback` WHERE itemid='.$itemid[0].' and customer='.$customerid[0].'';
-$getcategories = $conn->query($categories);
-$getcategories->setFetchMode(PDO::FETCH_ASSOC);
-$count=$getcategories->rowCount();
+$getfeedback='SELECT * FROM `feedback` WHERE itemid='.$itemid[0].' and customer='.$customerid[0].'';
+$count=sql_selectcount($getfeedback,$conn);
+
 if($count==0){
 
 
 
 $rate= 'INSERT INTO `feedback`(`itemid`, `customer`, `type`, `comments`, `rating`) VALUES ("'.$itemid[0].'","'.$customerid[0].'","ITEM","'.$comments[0].'","'.$newrating.'")';
-$createrating= $conn->prepare($rate);
-$createrating->execute();
+sql_insert($rate,$conn);
+
 
 
 echo '[{"message":"your rating was added"}]';	

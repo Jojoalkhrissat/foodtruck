@@ -1,5 +1,6 @@
 <?php
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 preg_match('/(?<=customerid":").+?(?=")/',$post,$customerid);
 preg_match('/(?<=orderid":").+?(?=")/',$post,$orderid);
@@ -11,9 +12,7 @@ preg_match('/(?<=orderid=).+?(?=&|$)/',$post,$orderid);
 
 
 $order= 'UPDATE orders SET status="CANCELLED",ordertime='.'CURRENT_TIME WHERE id="'.$orderid[0].'"'; 
-$dispatchorder= $conn->prepare($order);
-$dispatchorder->execute();
-$isupdated= $dispatchorder->rowCount();
+sql_update($order,$conn);
 
 
 

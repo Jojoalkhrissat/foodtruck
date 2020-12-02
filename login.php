@@ -1,24 +1,23 @@
 <?php
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 $post = file_get_contents('php://input');
 preg_match('/(?<=username":").+?(?=")/',$post,$username);
 preg_match('/(?<=password":").+?(?=")/',$post,$password);
+preg_match('/(?<=token":").+?(?=")/',$post,$token);
 if(!isset($username[0])&&!isset($password[0])){
 preg_match('/(?<=username=).+?(?=&|$)/',$post,$username);
 preg_match('/(?<=password=).+?(?=&|$)/',$post,$password);
+preg_match('/(?<=token=).+?(?=&|$)/',$post,$token);
 }
-$checkuser ="SELECT id,usertype,adminid,customerid,driverid FROM `loginandregister` WHERE username='$username[0]' AND password='$password[0]'";
-$user = $conn->query($checkuser);
-$user->setFetchMode(PDO::FETCH_ASSOC);
-$count=$user->rowCount();
+$checkuser ="SELECT id,usertype,adminid,customerid,driverid FROM `loginandregister` WHERE username=".$username[0]." AND password=".$password[0]."";
+$count=sql_selectcount($checkuser,$conn);
 if($count==1){
 echo '[';
-$MyJsonData="";	
-while($row = $user->fetch()):
-$MyJsonData=$MyJsonData.",".json_encode($row);
-endwhile;
+$MyJsonData=sql_selectdata($checkuser,$conn);
+
 $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
 
 preg_match('/(?<=usertype":").+?(?=")/',$MyJsonData,$usertype);
@@ -45,17 +44,14 @@ switch ($usertype[0]) {
 		break;
 }
 
-$getuser = $conn->query($getuserinfo);
-$getuser->setFetchMode(PDO::FETCH_ASSOC);
-$MyJsonData1="";	
-while($row = $getuser->fetch()):
-$MyJsonData1=$MyJsonData1.",".json_encode($row);
-endwhile;
+$MyJsonData1 = sql_selectdata($getuserinfo,$conn);
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
 preg_match('/(?<=active":").+?(?=")/',$MyJsonData1,$active);
+preg_match('/(?<=id":").+?(?=")/',$MyJsonData1,$customerid2);
 if($active=1){
-
+$token='INSERT INTO `deviceindex`(`customer`, `devicetoken`) VALUES ("'.$customerid2[0].'","'.$token[0].'")';
+sql_insert($token,$conn);
 echo $MyJsonData1;
 }else
 {

@@ -1,68 +1,50 @@
 <?php
 
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "GET"){
 $customerid=isset($_GET['customerid'])?$_GET['customerid']:"";
 if($customerid!=""){
 try{
 	echo "[";
-	$MyJsonData="";
-$MyJsonData1="";
+	
+
 $cartitems='SELECT O.'.'id,O.shop, O.description, O.orderstart, O.orderend, O.ordertotaltime, O.status, O.coupon,O.orderprice FROM orders O,orderelements OE,items I WHERE OE.ordernumber=O.id and OE.item=I.id and O.status!="CART" and O.customer='.$customerid.' GROUP BY O.id order by O.orderstart desc';
+$MyJsonData1=sql_selectdata($cartitems,$conn);
 
-$getcartitems = $conn->query($cartitems);
-$getcartitems->setFetchMode(PDO::FETCH_ASSOC);
-$resultcount=$getcartitems->rowCount();
-while($row = $getcartitems->fetch()):
-$jsonrow=json_encode($row);
-preg_match('/(?<=orderstart":"\d\d\d\d\-\d\d\-\d\d ).+?(?=")/',$jsonrow,$ordertime);
-$jsonrow = preg_replace('/(?<=orderstart":"\d\d\d\d\-\d\d\-\d\d \d\d\:\d\d\:\d\d")\,/', ',"orderstarttime":"'.$ordertime[0].'",', $jsonrow);
-
-
-
-
-
-$MyJsonData1=$MyJsonData1.','.$jsonrow;
+preg_match_all('/(?<=orderstart":"\d\d\d\d\-\d\d\-\d\d ).+?(?=")/',$MyJsonData1,$ordertime);
+for ($i=0; $i < count($ordertime[0]); $i++) { 
+$MyJsonData1=	preg_replace('/(?<=orderstart":"\d\d\d\d\-\d\d\-\d\d \d\d\:\d\d\:\d\d")\,/', ',"orderstarttime":"'.$ordertime[0][$i].'",', $MyJsonData1,$i+1);
+}
+preg_match_all('/(?<=coupon":").+?(?=")/',$MyJsonData1,$coupon);
+preg_match_all('/(?<=orderprice":").+?(?=")/',$MyJsonData1,$orderprice);
+if(isset($coupon[0])){
 
 
 
 
-endwhile;
-preg_match('/(?<=coupon":").+?(?=")/',$MyJsonData1,$coupon);
-preg_match('/(?<=orderprice":").+?(?=")/',$MyJsonData1,$orderprice);
 
 
 
 
-$coup='SELECT * FROM `coupons` WHERE id='.$coupon[0].'';
-$getcoup = $conn->query($coup);
-$getcoup->setFetchMode(PDO::FETCH_ASSOC);
-$resultcount=$getcoup->rowCount();
-$MyJsonData="";
-while($row = $getcoup->fetch()):
-$jsonrow=json_encode($row);
-$MyJsonData=$MyJsonData.','.$jsonrow;
-endwhile;
+
+
+
+for($i=0;$i<count($coupon[0]);$i++){
+$coup='SELECT * FROM `coupons` WHERE id='.$coupon[0][$i].'';
+$MyJsonData=sql_selectdata($getcoup,$conn);
 preg_match('/(?<=discount":").+?(?=")/',$MyJsonData,$discount);
-$MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 
 
 
-
-for($i=0;$i<count($coupon);$i++){
-
-
-
-
-
-
-$totalprice=doubleval($orderprice[$i])*doubleval($discount[$i]);
+$totalprice=doubleval($orderprice[0][$i])*doubleval($discount[0]);
 
 $MyJsonData1=preg_replace('/(?<=orderprice":").+?(?=")/',$totalprice ,$MyJsonData1 ,$i+1);
 
 
 }
-
+}
+$MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 echo $MyJsonData1;
 
 

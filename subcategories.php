@@ -1,18 +1,13 @@
 <?php
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "GET"){
 	$category=$_GET['category'];
 	try{
-$MyJsonData1="";
+
 echo "[";
 $subcategories="SELECT `id`, `subcatname`,`subcatnamear`, `photo` FROM `subcategory` where category='$category'";
-$getsubcategories = $conn->query($subcategories);
-$getsubcategories->setFetchMode(PDO::FETCH_ASSOC);
-while($row = $getsubcategories->fetch()):
-$jsonrow=json_encode($row);
-$jsonrow=preg_replace('/(?<=subcatnamear":").+?(?=")/',$row['subcatnamear'], $jsonrow);
-$MyJsonData1=$MyJsonData1.",".$jsonrow;
-endwhile;
+$MyJsonData1=sql_selectdata($subcategories,$conn);
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
 echo $MyJsonData1;

@@ -51,15 +51,42 @@ $getuser = $conn->query($getuserinfo);
 $getuser->setFetchMode(PDO::FETCH_ASSOC);
 $MyJsonData1="";	
 while($row = $getuser->fetch()):
-	$photo= $row['photo'];
-$jsonrow=json_encode($row);
-$jsonrow=preg_replace('/(?<=shopnamear":").+?(?=")/', $row['shopnamear'], $jsonrow);
-$MyJsonData1=$MyJsonData1.",".$jsonrow;
-endwhile;
-$MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
-preg_match('/(?<=active":").+?(?=")/',$MyJsonData1,$active);
-if($active=1){
+	session_start();
+	$id= isset($row['id'])?$row['id']:"id";
+	$photo= isset($row['photo'])?$row['photo']:"photo";
+	$shopname=isset($row['shopname'])?$row['shopname']:"shopname";
+	$shopnamear=isset($row['shopnamear'])?$row['shopnamear']:"shopnamear";
+	$firstname=isset($row['firstname'])?$row['firstname']:"firstname";
+	$lastname=isset($row['lastname'])?$row['lastname']:"lastname";
+	$phonenumber=isset($row['phonenumber'])?$row['phonenumber']:"phonenumber";
+	$email=isset($row['email'])?$row['email']:"email";
+	$joindate=isset($row['joindate'])?$row['joindate']:"joindate";
+	$opentime=isset($row['opentime'])?$row['opentime']:"opentime";
+	$closetime=isset($row['closetime'])?$row['closetime']:"closetime";
+	$city=isset($row['city'])?$row['city']:"city";
+	$active=isset($row['active'])?$row['active']:"active";
+	$address=isset($row['address'])?$row['address']:"address";
+	$location=isset($row['location'])?$row['location']:"location";
+	$_SESSION['id']=$id;
+	$_SESSION['photo']=$photo;
+	$_SESSION['shopname']=$shopname;
+	$_SESSION['shopnamear']=$shopnamear;
+	$_SESSION['firstname']=$firstname;
+	$_SESSION['lastname']=$lastname;
+	$_SESSION['phonenumber']=$phonenumber;
+	$_SESSION['email']=$email;
+	$_SESSION['joindate']=$joindate;
+	$_SESSION['opentime']=$opentime;
+	$_SESSION['closetime']=$closetime;
+	$_SESSION['city']=$city;
+	$_SESSION['active']=$active;
+	$_SESSION['address']=$address;
+	$_SESSION['location']=$location;
 
+endwhile;
+
+if($active=1){
+$active="yes";
 
 }else
 {
@@ -84,29 +111,9 @@ echo "400 error bad request";
 	http_response_code(400);
 	echo "400 error bad request";
 }
+header('location:http://localhost/foodtruck/adminpanelft/login/profile');
 ?>
 
 
 
 
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="login.css">
-</head>
-<body>
-<div class="navbar">
-	<div id="logo">
-  <a class="logo" href="#">FoodTruck</a>
-  </div>
-  <ul class="nav">
-    <li><a href="#">profile</a></li>
-    <li><a href="#">subcategories</a></li>
-    <li><a href="#">items</a></li>
-    <li><a href="#">sales</a></li>
-  </ul>
-</div>
-<img src="../../<?php echo $photo; ?>" width="5%" height="5%">
-</body>
-</html>

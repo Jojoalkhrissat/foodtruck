@@ -1,5 +1,6 @@
 <?php
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 $post = file_get_contents('php://input');
@@ -23,12 +24,7 @@ preg_match('/(?<=city=).+?(?=&|$)/',$post,$city);
 }
 
 $getuserinfo="SELECT id FROM customers where phonenumber='$phonenumberafter[0]'";
-$getuser = $conn->query($getuserinfo);
-$getuser->setFetchMode(PDO::FETCH_ASSOC);
-$MyJsonData1="";	
-while($row = $getuser->fetch()):
-$MyJsonData1=$MyJsonData1.",".json_encode($row);
-endwhile;
+$MyJsonData1 = sql_selectdata($getuserinfo,$conn);
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 preg_match('/(?<=active":").+?(?=")/',$MyJsonData1,$active);
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData1,$id);
@@ -45,8 +41,7 @@ $photo[0]="";
 }
 
 $usernamechange= 'UPDATE loginandregister SET username="'.$username[0].'" WHERE username="'.$username[0].'"'; 
-$updateusername= $conn->prepare($usernamechange);
-$updateusername->execute();
+sql_update($usernamechange,$conn);
 
 
 
@@ -120,8 +115,7 @@ file_put_contents($myfile,$contents);
 
 
 $customerinfo= 'UPDATE customers SET firstname="'.$firstname[0].'",lastname="'.$lastname[0].'",phonenumber="'.$phonenumberafter[0].'",city="'.$city[0].'",photo="'.$myfile.'" WHERE id="'.$id[0].'"'; 
-$updatecustomerinfo= $conn->prepare($customerinfo);
-$updatecustomerinfo->execute();
+sql_update($customerinfo,$conn);
 
 
 
@@ -136,22 +130,15 @@ $updatecustomerinfo->execute();
 
 }else{
 	$usernamechange= 'UPDATE loginandregister SET username="'.$username[0].'" WHERE username="'.$username[0].'"'; 
-$updateusername= $conn->prepare($usernamechange);
-$updateusername->execute();
+sql_update($usernamechange,$conn);
 $customerinfo= 'UPDATE customers SET firstname="'.$firstname[0].'",lastname="'.$lastname[0].'",phonenumber="'.$phonenumberafter[0].'",city="'.$city[0].'" WHERE id="'.$id[0].'" ';
-$updatecustomerinfo= $conn->prepare($customerinfo);
-$updatecustomerinfo->execute();
+sql_update($customerinfo,$conn);
 
 }
 
 
 $getuserinfo="SELECT * FROM customers where id=".$id[0]."";
-$getuser = $conn->query($getuserinfo);
-$getuser->setFetchMode(PDO::FETCH_ASSOC);
-$MyJsonData1="";	
-while($row = $getuser->fetch()):
-$MyJsonData1=$MyJsonData1.",".json_encode($row);
-endwhile;
+$MyJsonData1 =sql_selectdata($getuserinfo,$conn);
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 
 $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);

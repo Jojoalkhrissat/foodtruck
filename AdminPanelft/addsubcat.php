@@ -1,12 +1,13 @@
 <?php
 require "../connect.php";
 if(isset($_POST["submit"])) {
-$shop= $_POST["shops"];
+  session_start();
+$shop= $_SESSION["id"];
 $subcatname= $_POST["subcatname"];
 $subcatnamear=$_POST["subcatnamear"];
 $category= $_POST["categories"];
 
-echo $subcatnamear;
+
 
 
 
@@ -14,18 +15,18 @@ echo $subcatnamear;
 $subcat= 'INSERT INTO `subcategory`(`subcatname`, `subcatnamear`, `shop`, `category`) VALUES ("'.$subcatname.'","'.$subcatnamear.'","'.$shop.'","'.$category.'")';
 $createsubcat= $conn->prepare($subcat);
 $createsubcat->execute();
-$count=$createsubcat->rowCount();
+
 
 
 echo '[{"message":"your review was entered"}]';	
 
 
-$shops='SELECT * FROM shop';
-$getshops = $conn->query($shops);
-$getshops->setFetchMode(PDO::FETCH_ASSOC);
+$subcatid='SELECT * FROM subcategory where subcatname="'.$subcatname.'" and shop="'.$shop.'" and subcatnamear="'.$subcatnamear.'"';
+$getsubcatid = $conn->query($subcatid);
+$getsubcatid->setFetchMode(PDO::FETCH_ASSOC);
 
-while($row = $getshops->fetch()):
-
+while($row = $getsubcatid->fetch()):
+$id=$row['id'];
 endwhile;
 
 
@@ -76,7 +77,7 @@ endwhile;
 if(file_exists($_FILES['subcatimage']['tmp_name'])){
 
 
-$target_dir = "../img/subcategory/";
+$target_dir = "localhost/foodtruck/img/subcategory/";
 
 $uploadOk = 1;
 
@@ -100,7 +101,7 @@ $uploadOk = 1;
 preg_match('/(?<=\/).+?(?=$)/',$check["mime"],$ext);
 // echo $ext[0];
 
-$target_file = $target_dir . basename('abc'.'.'.$ext[0]);
+$target_file = $target_dir . basename($id.'.'.$ext[0]);
 
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
@@ -125,12 +126,15 @@ if ($uploadOk == 0) {
   }
 }
 
-
+$subcat= 'update `subcategory`set photo="'.$target_file.'" where id="'.$id.'"';
+$createsubcat= $conn->prepare($subcat);
+$createsubcat->execute();
 
 }
 
 
 
+header('location:http://localhost/foodtruck/adminpanelft/addsubcatpage');
 
 
 ?>

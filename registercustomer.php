@@ -1,5 +1,6 @@
 <?php
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 $post = file_get_contents('php://input');
@@ -15,6 +16,7 @@ preg_match('/(?<=gender":").+?(?=")/',$post,$gender);
 preg_match('/(?<=city":").+?(?=")/',$post,$city);
 preg_match('/(?<=address":").+?(?=")/',$post,$address);
 preg_match('/(?<=dob":").+?(?=")/',$post,$dob);
+preg_match('/(?<=token":").+?(?=")/',$post,$token);
 $username=$phonenumber;
 if(!isset($username[0])&&!isset($password[0])&&!isset($firstname[0])&&!isset($lastname[0])&&!isset($email[0])&&!isset($gender[0])&&!isset($dob[0])){
 preg_match('/(?<=username=).+?(?=&|$)/',$post,$username);
@@ -29,8 +31,15 @@ preg_match('/(?<=gender=).+?(?=&|$)/',$post,$gender);
 preg_match('/(?<=city=).+?(?=&|$)/',$post,$city);
 preg_match('/(?<=address=).+?(?=&|$)/',$post,$address);
 preg_match('/(?<=dob=).+?(?=&|$)/',$post,$dob);
+preg_match('/(?<=token=).+?(?=&|$)/',$post,$token);
 $username=$phonenumber;
 }
+$fetchuserinfo='SELECT * FROM customers WHERE phonenumber="'.$phonenumber[0].'" or email="'.$email[0].'"';
+
+$checkregistered=sql_selectcount($fetchuserinfo,$conn);
+if($checkregistered==0){
+
+
 if(!isset($photopath[0])||$photopath[0]==""){
 $photopath[0]="";
 }if(!isset($photo[0])||$photo[0]==""){
@@ -41,17 +50,13 @@ $address[0]="";
 }
 if(isset($username[0])&&isset($password[0])&&isset($firstname[0])&&isset($lastname[0])&&isset($email[0])&&isset($gender[0])&&isset($dob[0])){
 $userinfo= "INSERT INTO `customers`(`firstname`, `lastname`, `email`, `phonenumber`,`address`,`dateofbirth`,`gender`,`city`) VALUES ('$firstname[0]','$lastname[0]','$email[0]','$phonenumber[0]','$address[0]','$dob[0]','$gender[0]','$city[0]')";
-$stmt= $conn->prepare($userinfo);
-$isinserted=$stmt->execute();
-if($isinserted){
-$fetchuserinfo='SELECT * FROM customers WHERE Email="'.$email[0].'"';
-$getuser = $conn->query($fetchuserinfo);
-$getuser->setFetchMode(PDO::FETCH_ASSOC);
 
-$MyJsonData="";	
-while($row = $getuser->fetch()):
-$MyJsonData=$MyJsonData.",".json_encode($row);
-endwhile;
+sql_insert($userinfo,$conn);
+
+$fetchuserinfo='SELECT * FROM customers WHERE phonenumber="'.$phonenumber[0].'"';
+
+$MyJsonData=sql_selectdata($fetchuserinfo,$conn);	
+
 $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 
@@ -121,43 +126,39 @@ file_put_contents($myfile,$contents);
 
 $MyJsonData = preg_replace('/Photo":".+?"/', 'Photo":"'.$myfile.'"', $MyJsonData);
 
-$adminphoto= 'UPDATE customers set Photo="'.$myfile.'" where phonenumber="'.$phonenumber[0].'"'; 
-$photoupdate= $conn->prepare($adminphoto);
-$photoupdate->execute();
+$addphoto= 'UPDATE customers set Photo="'.$myfile.'" where phonenumber="'.$phonenumber[0].'"'; 
+sql_update($addphoto,$conn);
 $fetchuserinfo='SELECT * FROM customers WHERE phonenumber="'.$phonenumber[0].'"';
-$getuser = $conn->query($fetchuserinfo);
-$getuser->setFetchMode(PDO::FETCH_ASSOC);
 
-$MyJsonData1="";
+$MyJsonData1=sql_selectdata($fetchuserinfo,$conn);
+
+
 $userlogin="INSERT INTO `loginandregister`(`customerid`, `username`, `password`, `usertype`) VALUES ('$id[0]','$username[0]','$password[0]','CUSTOMER')";
-$stmt1= $conn->prepare($userlogin);
-$stmt1->execute();
+sql_insert($userlogin,$conn);
 $fetuserid='SELECT * FROM loginandregister WHERE CustomerId="'.$id[0].'"';
-$getuserid = $conn->query($fetuserid);
-$getuserid->setFetchMode(PDO::FETCH_ASSOC);
-while($row = $getuserid->fetch()):
-$MyJsonData1=$MyJsonData1.",".json_encode($row);
-endwhile;
+$MyJsonData1=sql_selectdata($fetuserid,$conn);
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
+$token='INSERT INTO `deviceindex`(`userid`, `devicetoken`) VALUES ("'.$id[0].'","'.$token[0].'")';
+sql_insert($token,$conn);
+// $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
 echo "[";
-echo $MyJsonData1.",";
 echo $MyJsonData;
 echo "]";
+}else{http_response_code(400);
+	echo '{"message":"400 error bad request"}';
 
+}
 }else{
 http_response_code(401);
-echo "User already exists";
+	echo '{"message":"already registered"}';	
 }
-}else{http_response_code(400);
-	echo "400 error bad request";
 
-}
 }catch(Exception $e){
 	http_response_code(400);
-	echo "400 error bad request";
+	echo '{"message":"400 error bad request"}';
 }
 }else{
 	http_response_code(400);
-	echo "400 error bad request";
+	echo '{"message":"400 error bad request"}';
 }
 ?>

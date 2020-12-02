@@ -1,5 +1,6 @@
 <?php
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	try{
 		$post = file_get_contents("php://input");
@@ -12,8 +13,7 @@ preg_match('/(?<=cartid=).+?(?=&|$)/',$post,$cartid);
 
 if(isset($cartid[0])||$cartid[0]!=""||$cartid[0]!=" "){
 $clearcart= "DELETE from orderelements where ordernumber=".$cartid[0]."";
-$stmt= $conn->prepare($clearcart);
-$stmt->execute();
+sql_delete($clearcart,$conn);
 
 
 
@@ -22,8 +22,7 @@ $stmt->execute();
 
 
 $deletecart= "DELETE from orders where id=".$cartid[0]."";
-$stamt= $conn->prepare($deletecart);
-$stamt->execute();
+sql_delete($deletecart,$conn);
 
 echo '{"Message":"Cart emptied"}';
 

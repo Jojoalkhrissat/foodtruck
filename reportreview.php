@@ -1,5 +1,6 @@
 <?php
 require "connect.php";
+require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 $post = file_get_contents("php://input");
@@ -20,17 +21,11 @@ preg_match('/(?<=comments=).+?(?=&|$)/',$post,$comments);
 
 
 $report= 'INSERT INTO `reportreview`(`reviewid`, `comment`, `customerid`) VALUES ("'.$reviewid[0].'","'.$comments[0].'","'.$customerid[0].'")';
-$reportreview= $conn->prepare($report);
-$reportreview->execute();
-$count=$reportreview->rowCount();
+sql_insert($report,$conn);
 
-if($count==1){
+
 echo '[{"message":"you reported this review"}]';	
-}else{
-http_response_code(400);
-	echo '[{"message":"something went wrong"}]';	
 
-}
 
 
 
