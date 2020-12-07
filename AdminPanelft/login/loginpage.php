@@ -7,17 +7,9 @@
 	<link rel="stylesheet" type="text/css" href="loginpage.css">
 </head>
 <body>
-	<div class="navbar">
-	<div id="logo">
-  <a class="logo" href="#">FoodTruck</a>
-  </div>
-  <ul class="nav">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">login</a></li>
-    <li><a href="#">register</a></li>
-    <li><a href="#">About</a></li>
-  </ul>
-</div>
+<?php
+require "navbar.html";
+?>
 <div class="container">
 	<div class="inputdata">
 <form method="post" action="login.php">

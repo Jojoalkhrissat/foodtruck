@@ -6,26 +6,20 @@ session_start();
 <html>
 <head>
 	<title></title>
-	<link rel="stylesheet" type="text/css" href="login1.css">
+	<link rel="stylesheet" type="text/css" href="profile.css">
 </head>
 <body>
-<div class="navbar">
-	<div id="logo">
-  <a class="logo" href="#">FoodTruck</a>
-  </div>
-  <ul class="nav">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">login</a></li>
-    <li><a href="#">register</a></li>
-    <li><a href="#">About</a></li>
-  </ul>
-</div>
+<?php
+require "navbar.html";
+?>
 <div class="img">
 <img src="../../<?php echo $_SESSION['photo']; ?>">
 </div><br>
 <div class="sidebar">
-<button class="side" id="addsubcat" onclick="location.href = '../addsubcatpage.php';">Add SubCategory</button>
-<button class="side" id="addproduct">Add Product</button>
+<button class="side" id="addsubcat" onclick="location.href = 'addsubcatpage.php';">Add SubCategory</button>
+<button class="side" id="addproduct" onclick="location.href = 'additempage.php';">Add Product</button>
+<button class="side" id="modifysubcat" onclick="location.href = 'modifysubcatpage.php';">Modify SubCategory</button>
+<button class="side" id="modifyproduct" onclick="location.href = 'modifyitempage.php';">Modify Product</button>
 </div><br>
 
 

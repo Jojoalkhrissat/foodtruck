@@ -3,6 +3,7 @@ require "connect.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 $post = file_get_contents('php://input');
+session_start();
 
 preg_match('/(?<=username":").+?(?=")/',$post,$username);
 preg_match('/(?<=password":").+?(?=")/',$post,$password);
@@ -10,7 +11,15 @@ if(!isset($username[0])&&!isset($password[0])){
 preg_match('/(?<=username=).+?(?=&|$)/',$post,$username);
 preg_match('/(?<=password=).+?(?=&|$)/',$post,$password);
 }
-$checkuser ="SELECT id,usertype,adminid,customerid,driverid,shopid FROM `loginandregister` WHERE username='$username[0]' AND password='$password[0]'";
+if(isset($username[0])&&isset($password[0])){
+$_SESSION['username']=$username[0];
+$_SESSION['password']=$password[0];	
+}
+
+
+
+
+$checkuser ="SELECT id,usertype,adminid,customerid,driverid,shopid FROM `loginandregister` WHERE username='".$_SESSION['username']."' AND password='".$_SESSION['password']."'";
 $user = $conn->query($checkuser);
 $user->setFetchMode(PDO::FETCH_ASSOC);
 $count=$user->rowCount();
@@ -50,8 +59,9 @@ switch ($usertype[0]) {
 $getuser = $conn->query($getuserinfo);
 $getuser->setFetchMode(PDO::FETCH_ASSOC);
 $MyJsonData1="";	
+
 while($row = $getuser->fetch()):
-	session_start();
+	
 	$id= isset($row['id'])?$row['id']:"id";
 	$photo= isset($row['photo'])?$row['photo']:"photo";
 	$shopname=isset($row['shopname'])?$row['shopname']:"shopname";
