@@ -9,41 +9,28 @@ try{
 	echo "[";
 	
 
-$cartitems='SELECT O.'.'id,O.shop, O.description, O.orderstart, O.orderend, O.ordertotaltime, O.status, O.coupon,O.orderprice FROM orders O,orderelements OE,items I WHERE OE.ordernumber=O.id and OE.item=I.id and O.status!="CART" and O.customer='.$customerid.' GROUP BY O.id order by O.orderstart desc';
+$cartitems='SELECT O.'.'id,O.shop, O.description, O.orderstart, O.orderend, O.ordertotaltime, O.status, O.coupon,sum((I.price*OE.count)-(I.price*OE.count*C.discount)) as orderprice FROM orders O,orderelements OE,items I,coupons C WHERE C.id=O.coupon and OE.ordernumber=O.id and OE.item=I.id and O.status!="CART" and O.customer='.$customerid.' GROUP BY O.id order by O.orderstart desc';
 $MyJsonData1=sql_selectdata($cartitems,$conn);
 
-preg_match_all('/(?<=orderstart":"\d\d\d\d\-\d\d\-\d\d ).+?(?=")/',$MyJsonData1,$ordertime);
-for ($i=0; $i < count($ordertime[0]); $i++) { 
-$MyJsonData1=	preg_replace('/(?<=orderstart":"\d\d\d\d\-\d\d\-\d\d \d\d\:\d\d\:\d\d")\,/', ',"orderstarttime":"'.$ordertime[0][$i].'",', $MyJsonData1,$i+1);
+preg_match_all('/(?<=orderstart":").+?(?=")/',$MyJsonData1,$ordertime);
+for ($i=0; $i < count($ordertime[0]); $i++) {
+ $ordertime[0][$i]=preg_replace('/ \d\d\:\d\d\:\d\d/', '', $ordertime[0][$i]);
+$MyJsonData1=	preg_replace('/(?<=orderstart":"'.$ordertime[0][$i].' \d\d\:\d\d\:\d\d")\,/', ',"orderstarttime":"'.$ordertime[0][$i].'",', $MyJsonData1);
 }
-preg_match_all('/(?<=coupon":").+?(?=")/',$MyJsonData1,$coupon);
+
 preg_match_all('/(?<=orderprice":").+?(?=")/',$MyJsonData1,$orderprice);
-if(isset($coupon[0])){
+for($i=0;$i<count($orderprice[0]);$i++){
+
+$MyJsonData1=preg_replace('/'.$orderprice[0][$i].'/',round($orderprice[0][$i]),$MyJsonData1);
 
 
 
 
 
-
-
-
-
-
-
-for($i=0;$i<count($coupon[0]);$i++){
-$coup='SELECT * FROM `coupons` WHERE id='.$coupon[0][$i].'';
-$MyJsonData=sql_selectdata($getcoup,$conn);
-preg_match('/(?<=discount":").+?(?=")/',$MyJsonData,$discount);
-
-
-
-$totalprice=doubleval($orderprice[0][$i])*doubleval($discount[0]);
-
-$MyJsonData1=preg_replace('/(?<=orderprice":").+?(?=")/',$totalprice ,$MyJsonData1 ,$i+1);
 
 
 }
-}
+
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 echo $MyJsonData1;
 

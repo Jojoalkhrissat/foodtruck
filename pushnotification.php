@@ -22,12 +22,12 @@ define('API_ACCESS_KEY','AAAA4ckndXg:APA91bE3yAgJdJPOFjbBRQ2qBv6u-VsIO5bx9tTwyyv
             'click_action'=> 'FLUTTER_NOTIFICATION_CLICK'
 
         ];
-        // $extraNotificationData = ["message" => $notification];
+        $extraNotificationData = ["message" => $notification];
 
         $fcmNotification = [
             //'registration_ids' => $tokenList, //multple token array
             'to'        => $token, //single token
-            'notification' => $notification,
+            // 'notification' => $notification,
             'data' => $notification
         ];
 

@@ -24,27 +24,6 @@ $MyJsonData1=sql_selectdata($itemspershop,$conn);
 preg_match_all('/(?<=price":").+?(?=")/',$MyJsonData1,$price);
 preg_match_all('/(?<=count":").+?(?=")/',$MyJsonData1,$Counts);
 
-for($i=0;$i<count($itemid[0]);$i++){
-$removedandadded=doubleval($price[0][$i])*doubleval($Counts[0][$i]);
-
-
-
-
-$updatecount= 'UPDATE orders set orderprice=orderprice-'.$removedandadded.' where id='.$cartid[0][0].'';
-sql_update($updatecount,$conn);
-
-}
-for($i=0;$i<count($itemid[0]);$i++){
-$removedandadded=doubleval($price[0][$i])*doubleval($count[0][$i]);
-
-
-
-
-$updatecount= 'UPDATE orders set orderprice=orderprice+'.$removedandadded.' where id='.$cartid[0][0].'';
-sql_update($updatecount,$conn);
-
-}
-
 
 
 

@@ -273,7 +273,7 @@ $createsubcat->execute();
 
 
 
-header('location:http://localhost/foodtruck/adminpanelft/login/additempage');
+header('location:http://localhost/foodtruck/adminpanel/items');
 
 
 ?>

@@ -4,10 +4,12 @@ require "sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {	
 try{
 $post = file_get_contents("php://input");
+preg_match('/(?<=shopid":").+?(?=")/',$post,$shopid);
 preg_match('/(?<=itemid":").+?(?=")/',$post,$itemid);
 preg_match('/(?<=customerid":").+?(?=")/',$post,$customerid);
 preg_match('/(?<=count":").+?(?=")/',$post,$count);
 if(!isset($itemid[0])&&!isset($customerid[0])){
+preg_match('/(?<=shopid=).+?(?=&|$)/',$post,$shopid);
 preg_match('/(?<=itemid=).+?(?=&|$)/',$post,$itemid);
 preg_match('/(?<=customerid=).+?(?=&|$)/',$post,$customerid);
 preg_match('/(?<=count=).+?(?=&|$)/',$post,$count);
@@ -22,15 +24,26 @@ $MyJsonData1=sql_selectdata($items,$conn);
 
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 $MyJsonData1 = preg_replace('/null/', 'nulldata', $MyJsonData1);
-preg_match('/(?<=shop":").+?(?=")/',$MyJsonData1,$Shop);
+
 preg_match('/(?<=preparetime":").+?(?=")/',$MyJsonData1,$PrepareTime);
 preg_match('/(?<=timesamples":").+?(?=")/',$MyJsonData1,$TimeSamples);
 preg_match('/(?<=price":").+?(?=")/',$MyJsonData1,$price);
 preg_match('/(?<=quantity":").+?(?=")/',$MyJsonData1,$quantity);
+preg_match('/(?<=shop":").+?(?=")/',$MyJsonData1,$ShopId);
 
 
 
-if(isset($Shop[0])){
+
+
+
+
+
+
+
+
+
+if(isset($ShopId[0])){
+
 if($TimeSamples[0]=="0"){
 $timeforready=intval($PrepareTime[0])*intval($count[0]);
 }else{
@@ -46,27 +59,19 @@ $MyJsonData=sql_selectdata($order,$conn);
 $MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 preg_match('/(?<=ordertotaltime":").+?(?=")/',$MyJsonData,$timeready);
-
+preg_match('/(?<=shop":").+?(?=")/',$MyJsonData,$Shop);
 
 
 
 
 if(!isset($id[0])){
 
-$createcart= 'INSERT INTO `orders`(`customer`, `shop`,`status`,`orderprice`) VALUES ('.$customerid[0].','.$Shop[0].',"CART",'.$totprice.')';
+$createcart= 'INSERT INTO `orders`(`customer`, `shop`,`status`,`orderprice`) VALUES ('.$customerid[0].','.$ShopId[0].',"CART",'.$totprice.')';
 sql_insert($createcart,$conn);
 
-
-$MyJsonData="";	
 $order="SELECT * FROM orders WHERE customer=".$customerid[0]." and status='CART'";
-$getorder = $conn->query($order);
-$getorder->setFetchMode(PDO::FETCH_ASSOC);
-while($row = $getorder->fetch()):
-$MyJsonData=$MyJsonData.",".json_encode($row);
-endwhile;
-$MyJsonData = preg_replace('/,/', '', $MyJsonData, 1);
+$MyJsonData=sql_selectdata($order,$conn);
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
-
 
 
 
@@ -74,13 +79,14 @@ $addtocart= 'INSERT INTO `orderelements`(`item`, `count`,`ordernumber`,`ordertim
 $stmt= $conn->prepare($addtocart);
 $stmt->execute();
 
-
+echo '{"ItemId":"'.$itemid[0].'","CustomerId":"'.$customerid[0].'","count":"'.$count[0].'","message":"Added to cart"}';
 }elseif(isset($id[0])){
 $elements="SELECT * FROM orderelements WHERE ordernumber=".$id[0]." and item=".$itemid[0]."";
 $MyJsonData2=sql_selectdata($elements,$conn);
 $MyJsonData2 = preg_replace('/,/', '', $MyJsonData2, 1);
 preg_match('/(?<=count":").+?(?=")/',$MyJsonData2,$Count);
 
+if($Shop[0]==$shopid[0]){
 
 if(isset($Count[0])){
 
@@ -169,10 +175,14 @@ sql_insert($updatecount,$conn);
 
 
 
-}
+
 echo '{"ItemId":"'.$itemid[0].'","CustomerId":"'.$customerid[0].'","count":"'.$count[0].'","message":"Added to cart"}';
 
-
+}else{
+http_response_code(400);
+echo '{"ItemId":"'.$itemid[0].'","CustomerId":"'.$customerid[0].'","count":"'.$count[0].'","message":"you can\'t change shop"}';	
+}
+}
 }else{
 http_response_code(400);
 echo '{"ItemId":"'.$itemid[0].'","CustomerId":"'.$customerid[0].'","count":"'.$count[0].'","message":"item does not exist"}';	

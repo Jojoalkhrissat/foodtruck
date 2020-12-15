@@ -54,7 +54,7 @@ sql_update($order,$conn);
 
 }
 
-if(!isset($description[0])){
+if(!isset($description[0])||$description[0]=""){
 $description[0]==" ";
 }
 
@@ -75,6 +75,7 @@ preg_match('/(?<=timeforready":").+?(?=")/',$MyJsonData,$timeforready);
 $minutes_to_add=intval($timeforready[0]);
 
 $order= 'UPDATE orders SET status="IN DISPATCH",coupon='.$couponid.',paymentmethod="CASH",orderstart='.'CURRENT_TIME WHERE customer="'.$customerid[0].'" and status="CART"'; 
+
 sql_update($order,$conn);
 
 }
@@ -95,9 +96,9 @@ sql_update($order,$conn);
 echo "[";
 
 $url = "https://test.oppwa.com/v1/payments";
-	$data = "entityId=8a8294174b7ecb28014b9699220015ca" .
+	$data = "entityId=8ac7a4c8765289b001765d5ee2fc15ac" .
                 "&amount=".$amount[0]."" .
-                "&currency=EUR" .
+                "&currency=SAR" .
                 "&paymentBrand=".$paymentbrand[0]."" .
                 "&paymentType=DB" .
                 "&card.number=".$cardnumber[0]."" .
@@ -111,7 +112,7 @@ $url = "https://test.oppwa.com/v1/payments";
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                   'Authorization:Bearer OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg='));
+                   'Authorization:Bearer OGFjN2E0Yzg3NjUyODliMDAxNzY1ZDVkZjVmYzE1YTh8N2pncEVSM1I4RA=='));
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);// this should be set to true in production
