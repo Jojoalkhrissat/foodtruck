@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 	
 		$category=$_GET['category'];
 $current_time=date("H:i:s",time());
-$shoppercat="SELECT S".".id,S.shopname,S.shopnamear,S.photo,S.location,S.opentime,S.closetime from shop S, subcategory SU WHERE S.id=SU.shop and SU.category=".$category." and S.active=1 GROUP by S.id";
+$shoppercat="SELECT S".".id,S.shopname,S.shopnamear,S.photo,S.location,S.address,S.opentime,S.closetime from shop S, subcategory SU WHERE S.id=SU.shop and SU.category=".$category." and S.active=1 GROUP by S.id";
 
 
 $MyJsonData1=sql_selectdata($shoppercat,$conn);
@@ -25,27 +25,27 @@ $shoprating= 'SELECT avg(F'.'.rating) as rating,count(F.rating) as ratingnumber 
 $MyJsonData=sql_selectdata($shoprating,$conn);
 preg_match('/\"rating\"\:\".+?\"\,\"ratingnumber\"\:\".+?\"/',$MyJsonData ,$rating);
 if (TimeIsBetweenTwoTimes($current_time, $opentime[0][$i], $closetime[0][$i])){
-$MyJsonData1 = str_replace('"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'"}', '"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'","available":"true"}', $MyJsonData1);
+$MyJsonData1 = str_replace('"id":"'.$id[0][$i].'"', '"id":"'.$id[0][$i].'","available":"true"', $MyJsonData1);
 if(isset($rating[0])){
-$MyJsonData1 =str_replace('"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'"', '"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'",'.$rating[0].'', $MyJsonData1);
+$MyJsonData1 =str_replace('"id":"'.$id[0][$i].'"', '"id":"'.$id[0][$i].'",'.$rating[0].'', $MyJsonData1);
 }else{
-$MyJsonData1 =str_replace('"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'"', '"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'","rating":"1","ratingnumber":"0"', $MyJsonData1);
+$MyJsonData1 =str_replace('"id":"'.$id[0][$i].'"', '"id":"'.$id[0][$i].'","rating":"1","ratingnumber":"0"', $MyJsonData1);
 }
 }
 else{
 
-$MyJsonData1 =str_replace('"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'"}', '"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'","available":"false"}', $MyJsonData1);
+$MyJsonData1 = str_replace('"id":"'.$id[0][$i].'"', '"id":"'.$id[0][$i].'","available":"false"', $MyJsonData1);
 if(isset($rating[0])){
-$MyJsonData1 =str_replace('"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'"', '"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'",'.$rating[0].'', $MyJsonData1);
+$MyJsonData1 =str_replace('"id":"'.$id[0][$i].'"', '"id":"'.$id[0][$i].'",'.$rating[0].'', $MyJsonData1);
 }else{
-$MyJsonData1 =str_replace('"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'"', '"opentime":"'.$opentime[0][$i].'","closetime":"'.$closetime[0][$i].'","rating":"1","ratingnumber":"0"', $MyJsonData1);
+$MyJsonData1 =str_replace('"id":"'.$id[0][$i].'"', '"id":"'.$id[0][$i].'","rating":"1","ratingnumber":"0"', $MyJsonData1);
 }
 }
 
 }
 
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
-$MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
+$MyJsonData1 = str_replace('null', '""', $MyJsonData1);
 
 echo "[";
 

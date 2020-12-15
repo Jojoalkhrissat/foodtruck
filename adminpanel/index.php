@@ -12,23 +12,15 @@ $startdate=$startdate!=""?$startdate:date('yy-m-d');
 $enddate=$enddate!=""?$enddate:date('yy-m-d');
 $year=substr($startdate,0,4);
 
-$getsales='SELECT sum(I'.'.price*OE.count) as sales,count(DISTINCT O.id) as orders from orders O join orderelements OE on O.id=OE.ordernumber left join items I on I.id=OE.item where O.orderstart BETWEEN "'.$startdate.' 00:00" and "'.$enddate.' 23:59" and O.coupon is null and O.status not in("CART","IN DISPATCH","CANCELED") and O.shop="'.$_SESSION['id'].'"';
 
-$MyJsonData=sql_selectdata($getsales,$conn);
-$MyJsonData=preg_replace('/null/', '"0"', $MyJsonData);
-preg_match('/(?<=sales":").+?(?=")/', $MyJsonData,$sales);
-preg_match('/(?<=orders":").+?(?=")/', $MyJsonData,$orders);
 
-$couponsales='SELECT sum((I.'.'price*OE.count)-(I.price*OE.count*C.discount)) as sales,C.couponname,count(DISTINCT O.id) as orders from orders O join coupons C on O.coupon=C.id join orderelements OE on O.id=OE.ordernumber left join items I on I.id=OE.item where O.orderstart BETWEEN "'.$startdate.' 00:00" and "'.$enddate.' 23:59" and O.coupon is not null and O.status not in("CART","IN DISPATCH","CANCELED") and O.shop="'.$_SESSION['id'].'"  GROUP by O.coupon ' ;
+$getsales='SELECT sum((I.'.'price*OE.count)-(I.price*OE.count*C.discount)) as sales,C.couponname,count(DISTINCT O.id) as orders from orders O join coupons C on O.coupon=C.id join orderelements OE on O.id=OE.ordernumber left join items I on I.id=OE.item where O.orderstart BETWEEN "'.$startdate.' 00:00" and "'.$enddate.' 23:59" and O.coupon is not null and O.status not in("CART","IN DISPATCH","CANCELED") and O.shop="'.$_SESSION['id'].'"' ;
 
-$MyJsonData2=sql_selectdata($couponsales,$conn);
+$MyJsonData2=sql_selectdata($getsales,$conn);
 $MyJsonData2=preg_replace('/null/', '"0"', $MyJsonData2);
-preg_match_all('/(?<=sales":").+?(?=")/', $MyJsonData2,$coupsales);
-preg_match_all('/(?<=orders":").+?(?=")/', $MyJsonData2,$orders2);
-for($i=0;$i<count($coupsales[0]);$i++){
-$sales[0]=$sales[0]+$coupsales[0][$i];
-$orders[0]=$orders[0]+$orders2[0][$i];
-}
+preg_match('/(?<=sales":").+?(?=")/', $MyJsonData2,$sales);
+preg_match('/(?<=orders":").+?(?=")/', $MyJsonData2,$orders);
+
 
 
 
@@ -36,18 +28,14 @@ $sales[0]=round($sales[0], 2);
 
 
 
-$getyearly='SELECT sum(I'.'.price*OE.count) as sales,count(DISTINCT O.id) as orders from orders O join orderelements OE on O.id=OE.ordernumber left join items I on I.id=OE.item where O.orderstart BETWEEN "'.$year.'-01-01 00:00" and "'.$year.'-12-31 23:59" and O.coupon is null and O.status not in("CART","IN DISPATCH","CANCELED") and O.shop="'.$_SESSION['id'].'" ';
+$getyearly='SELECT sum((I.'.'price*OE.count)-(I.price*OE.count*C.discount)) as sales,C.couponname,count(DISTINCT O.id) as orders from orders O join coupons C on O.coupon=C.id join orderelements OE on O.id=OE.ordernumber left join items I on I.id=OE.item where O.orderstart BETWEEN "'.$year.'-01-01 00:00" and "'.$year.'-12-31 23:59" and O.coupon is not null and O.status not in("CART","IN DISPATCH","CANCELED") and O.shop="'.$_SESSION['id'].'"';
 
-$getyearlycoup='SELECT sum((I.'.'price*OE.count)-(I.price*OE.count*C.discount)) as sales,C.couponname,count(DISTINCT O.id) as orders from orders O join coupons C on O.coupon=C.id join orderelements OE on O.id=OE.ordernumber left join items I on I.id=OE.item where O.orderstart BETWEEN "'.$year.'-01-01 00:00" and "'.$year.'-12-31 23:59" and O.coupon is not null and O.status not in("CART","IN DISPATCH","CANCELED") and O.shop="'.$_SESSION['id'].'"  GROUP by O.coupon ';
+
 $MyJsonData1=sql_selectdata($getyearly,$conn);
-$MyJsonData3=sql_selectdata($getyearlycoup,$conn);
 $MyJsonData1=preg_replace('/null/', '"0"', $MyJsonData1);
-preg_match_all('/(?<=sales":").+?(?=")/', $MyJsonData3,$yearlycoupsales);
 preg_match('/(?<=sales":").+?(?=")/', $MyJsonData1,$yearly);
 
-for($i=0;$i<count($yearlycoupsales[0]);$i++){
-$yearly[0]=$yearly[0]+$yearlycoupsales[0][$i];    
-}
+
 
 
 
@@ -198,7 +186,7 @@ header('location:http://localhost/foodtruck/adminpanel/login');
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Pending Requests</div>
-                                                <a href="#">
+                                                <a href="pendingorders">
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $ordercount[0];?></div>
                                         </a>
                                         </div>

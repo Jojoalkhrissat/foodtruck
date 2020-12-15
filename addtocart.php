@@ -66,7 +66,7 @@ preg_match('/(?<=shop":").+?(?=")/',$MyJsonData,$Shop);
 
 if(!isset($id[0])){
 
-$createcart= 'INSERT INTO `orders`(`customer`, `shop`,`status`,`orderprice`) VALUES ('.$customerid[0].','.$ShopId[0].',"CART",'.$totprice.')';
+$createcart= 'INSERT INTO `orders`(`customer`, `shop`,`status`) VALUES ('.$customerid[0].','.$ShopId[0].',"CART")';
 sql_insert($createcart,$conn);
 
 $order="SELECT * FROM orders WHERE customer=".$customerid[0]." and status='CART'";
@@ -90,8 +90,7 @@ if($Shop[0]==$shopid[0]){
 
 if(isset($Count[0])){
 
-$totprice=doubleval($price[0])*doubleval($count[0]);
-$count[0]=$count[0]+$Count[0];
+
 
 
 
@@ -102,11 +101,9 @@ $timeforready=intval($PrepareTime[0])*intval($count[0]);
 $timeforready=intval($PrepareTime[0]);
 }
 
-$updateprice= 'UPDATE orders set orderprice=orderprice+'.$totprice.' where id='.$id[0].'';
-sql_update($updateprice,$conn);
 
 
-$updatecount= 'UPDATE orderelements set ordertime='.$timeforready.',count='.$count[0].' where ordernumber='.$id[0].' and item='.$itemid[0].'';
+$updatecount= 'UPDATE orderelements set ordertime='.$timeforready.',count=count+"'.$count[0].'" where ordernumber='.$id[0].' and item='.$itemid[0].'';
 sql_update($updatecount,$conn);
 
 
@@ -119,14 +116,11 @@ sql_update($updatecount,$conn);
 
 
 }else{
-$totprice=doubleval($price[0])*doubleval($count[0]);
 
 $addtocart= 'INSERT INTO `orderelements`(`item`, `count`,`ordernumber`) VALUES ('.$itemid[0].','.$count[0].','.$id[0].')';
 sql_insert($addtocart,$conn);
 
 
-$updatecount= 'UPDATE orders set orderprice=orderprice+'.$totprice.' where id='.$id[0].'';
-sql_insert($updatecount,$conn);
 
 
 
