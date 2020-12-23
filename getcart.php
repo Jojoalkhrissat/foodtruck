@@ -9,7 +9,7 @@ try{
 	$current_time=date("H:i:s",time());
 	$MyJsonData="";
 $MyJsonData1="";
-$cartitems="SELECT O".".id, O.shop, OE.item, OE.count, O.status,I.itemname,I.itemnamear,I.price , I.photo, I.price*OE.count as fullprice FROM orderelements OE inner join items I on I.id=OE.item join orders O on O.id=OE.ordernumber WHERE O.status='CART' and O.customer=".$customerid."";
+$cartitems="SELECT O".".id, O.shop, OE.item, OE.count, O.status,I.itemname,I.itemnamear,ROUND(I.price,2 ) as price, I.photo, ROUND(I.price*OE.count,2) as fullprice FROM orderelements OE inner join items I on I.id=OE.item join orders O on O.id=OE.ordernumber WHERE O.status='CART' and O.customer=".$customerid."";
 $MyJsonData1=sql_selectdata($cartitems,$conn);
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);

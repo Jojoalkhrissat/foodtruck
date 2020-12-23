@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 	try{
 
 echo "[";
-$subcategories="SELECT `id`, `subcatname`,`subcatnamear`, `photo` FROM `subcategory` where category='$category'";
+$subcategories="SELECT SU."."id, SU.subcatname,SU.subcatnamear,SU.photo,S.shopname FROM subcategory SU, shop S where SU.shop=S.id and S.active=1 and category='$category'";
 $MyJsonData1=sql_selectdata($subcategories,$conn);
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);

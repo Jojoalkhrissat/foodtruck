@@ -1,0 +1,11 @@
+form input[type="file"]{
+	padding: 48px 0 0 0 !important;
+  
+  overflow: hidden ;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: url('Upload-PNG-Image.png') center center no-repeat #ffffff ;
+  border-radius: 25px;
+  background-size: 15px 15px !important;
+}

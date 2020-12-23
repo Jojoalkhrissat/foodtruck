@@ -1,11 +1,11 @@
 <?php
 require "../connect.php";
-if(isset($_POST["submit"])) {
+
   session_start();
 $shop= $_SESSION["id"];
 $subcatname= $_POST["subcatname"];
 $subcatnamear=$_POST["subcatnamear"];
-$category= $_POST["categories"];
+$category= $_POST["category"];
 
 
 
@@ -13,12 +13,13 @@ $category= $_POST["categories"];
 
 
 $subcat= 'INSERT INTO `subcategory`(`subcatname`, `subcatnamear`, `shop`, `category`) VALUES ("'.$subcatname.'","'.$subcatnamear.'","'.$shop.'","'.$category.'")';
+
 $createsubcat= $conn->prepare($subcat);
 $createsubcat->execute();
 
 
 
-echo '[{"message":"your review was entered"}]';	
+
 
 
 $subcatid='SELECT * FROM subcategory where subcatname="'.$subcatname.'" and shop="'.$shop.'" and subcatnamear="'.$subcatnamear.'"';
@@ -77,7 +78,7 @@ endwhile;
 if(file_exists($_FILES['subcatimage']['tmp_name'])){
 
 
-$target_dir = "localhost/foodtruck/img/subcategory/";
+$target_dir = "../img/subcategory/";
 
 $uploadOk = 1;
 
@@ -125,16 +126,16 @@ if ($uploadOk == 0) {
     echo "Sorry, there was an error uploading your file.";
   }
 }
-
+$target_file=preg_replace('/\.\.\//', '', $target_file);
 $subcat= 'update `subcategory`set photo="'.$target_file.'" where id="'.$id.'"';
 $createsubcat= $conn->prepare($subcat);
 $createsubcat->execute();
 
-}
 
 
 
-header('location:http://localhost/foodtruck/adminpanelft/addsubcatpage');
+
+header('location:http://localhost/foodtruck/adminpanelft/subcategories');
 
 
 ?>

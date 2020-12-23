@@ -1,4 +1,9 @@
-<html lang="en">
+<?php
+require 'connect.php';
+require 'sql.php';
+
+?>
+<html>
 <head>
   <link rel="stylesheet" type="text/css" href="aboutus.css">
     <meta charset="utf-8">
@@ -12,15 +17,41 @@
   <div class="about-section">
     <div class="inner-container">
       
-      <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+      <p class="text">
+
+<?php
+
+$aboutus="SELECT max(id),paragraph FROM aboutus"
+$MyJsonData=sql_selectdata($aboutus);
+preg_match('/(?<=paragraph":").+?(?=")/', $MyJsonData,$abouttext);
+echo $abouttext[0];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+?>
+
+
+
+
+
+
 
 </p>
       
       <div class="skills">
 
-        <span> food trucks</span>
-        <span> customers</span>
-        <span> contact us</span>
+       
         
         
       </div>

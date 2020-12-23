@@ -1,8 +1,8 @@
 <?php
 require 'connect.php';
 require 'sql.php';   
-session_start();
-if(isset($_SESSION['id'])){
+
+
 include('includes/header.php');
 include('includes/navbar.php');
 
@@ -14,7 +14,7 @@ $year=substr($startdate,0,4);
 
 
 
-$getsales='SELECT sum((I.'.'price*OE.count)-(I.price*OE.count*C.discount)) as sales,C.couponname,count(DISTINCT O.id) as orders from orders O join coupons C on O.coupon=C.id join orderelements OE on O.id=OE.ordernumber left join items I on I.id=OE.item where O.orderstart BETWEEN "'.$startdate.' 00:00" and "'.$enddate.' 23:59" and O.coupon is not null and O.status not in("CART","IN DISPATCH","CANCELED") and O.shop="'.$_SESSION['id'].'"' ;
+$getsales='SELECT sum((I.'.'price*OE.count)-(I.price*OE.count*C.discount)) as sales,C.couponname,count(DISTINCT O.id) as orders from orders O join coupons C on O.coupon=C.id join orderelements OE on O.id=OE.ordernumber left join items I on I.id=OE.item where O.orderstart BETWEEN "'.$startdate.' 00:00" and "'.$enddate.' 23:59" and O.coupon is not null and O.status not in("CART","IN DISPATCH","CANCELED")' ;
 
 $MyJsonData2=sql_selectdata($getsales,$conn);
 $MyJsonData2=preg_replace('/null/', '"0"', $MyJsonData2);
@@ -28,7 +28,7 @@ $sales[0]=round($sales[0], 2);
 
 
 
-$getyearly='SELECT sum((I.'.'price*OE.count)-(I.price*OE.count*C.discount)) as sales,C.couponname,count(DISTINCT O.id) as orders from orders O join coupons C on O.coupon=C.id join orderelements OE on O.id=OE.ordernumber left join items I on I.id=OE.item where O.orderstart BETWEEN "'.$year.'-01-01 00:00" and "'.$year.'-12-31 23:59" and O.coupon is not null and O.status not in("CART","IN DISPATCH","CANCELED") and O.shop="'.$_SESSION['id'].'"';
+$getyearly='SELECT sum((I.'.'price*OE.count)-(I.price*OE.count*C.discount)) as sales,C.couponname,count(DISTINCT O.id) as orders from orders O join coupons C on O.coupon=C.id join orderelements OE on O.id=OE.ordernumber left join items I on I.id=OE.item where O.orderstart BETWEEN "'.$year.'-01-01 00:00" and "'.$year.'-12-31 23:59" and O.coupon is not null and O.status not in("CART","IN DISPATCH","CANCELED")';
 
 
 $MyJsonData1=sql_selectdata($getyearly,$conn);
@@ -43,13 +43,11 @@ preg_match('/(?<=sales":").+?(?=")/', $MyJsonData1,$yearly);
 
 $yearly[0]=round($yearly[0], 2);
 
-$getorders='SELECT count(id) as ordercount from orders where status="IN DISPATCH" and shop="'.$_SESSION['id'].'"';
+$getorders='SELECT count(id) as ordercount from orders where status="IN DISPATCH"';
 $MyJsonData4=sql_selectdata($getorders,$conn);
 
 preg_match('/(?<=ordercount":").+?(?=")/', $MyJsonData4,$ordercount);
-}else{
-header('location:http://localhost/foodtruck/adminpanel/login');
-}
+
    
 
 ?>
@@ -119,7 +117,7 @@ header('location:http://localhost/foodtruck/adminpanel/login');
                                               
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Earnings (Annual)</div>
-                                           <a href="#"> <div class="h5 mb-0 font-weight-bold text-gray-800">$<?php echo $yearly[0];?></div>
+                                           <a href="ordersbyyear?startdate=<?php echo $year?>&enddate=<?php echo $year?>"> <div class="h5 mb-0 font-weight-bold text-gray-800">$<?php echo $yearly[0];?></div>
                                         </a>
                                         </div>
                                         
@@ -141,7 +139,7 @@ header('location:http://localhost/foodtruck/adminpanel/login');
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                               Earnings</div>
-                                           <a href="#"> <div class="h5 mb-0 font-weight-bold text-gray-800">$<?php echo $sales[0];?></div>
+                                           <a href="ordersbydate?startdate=<?php echo $startdate?>&enddate=<?php echo $enddate?>"> <div class="h5 mb-0 font-weight-bold text-gray-800">$<?php echo $sales[0];?></div>
                                          </a>
                                         </div>
                                         
@@ -163,7 +161,7 @@ header('location:http://localhost/foodtruck/adminpanel/login');
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <a href="#">
+                                                    <a href="ordersbydate?startdate=<?php echo $startdate?>&enddate=<?php echo $enddate?>">
                                                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $orders[0]?></div>
                                                 </a>
                                                 </div>

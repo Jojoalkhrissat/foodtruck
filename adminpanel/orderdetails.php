@@ -1,8 +1,7 @@
 <?php
 require 'connect.php';
 require 'sql.php';   
-session_start();
-if(isset($_SESSION['id'])){
+
 include('includes/header.php');
 include('includes/navbar.php');
 
@@ -22,25 +21,15 @@ $getdispatch->setFetchMode(PDO::FETCH_ASSOC);
 
 
 
-}else{
 
-
-
-
-}
 ?>
 
 <div class="container">
 <div class="card shadow mb-4">
 
- <div class="card-header py-3">
- <h6 class="m-0 font-weight-bold text-primary"> 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addadminprofile">
-       accept/reject order 
-</button>
-</h6>
 
-</div>
+
+
 <div class="card-body">
 <div class="table-responsive">
 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -65,7 +54,7 @@ while($row = $getdispatch->fetch()):
 echo "<td><center><label>".$row['item']."</label></center></td>";
 echo "<td><center><label>".$row['itemname']."</label></center></td>";
 echo "<td><center><label>".$row['itemnamear']."</label></center></td>";
-echo "<td><center><label>".$row['photo']."</label></center></td>";
+echo "<td><center><img style='width:50%;' src=../".$row['photo']."></label></center></td>";
 echo "<td><center><label>".$row['count']."</label></center></td>";
 
 echo	'</tr>';

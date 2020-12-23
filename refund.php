@@ -2,9 +2,13 @@
 
 
 function request() {
-	$url = "https://test.oppwa.com/v1/payments/8ac7a49f7664f761017665c619f11fbd";
+	$id=$_POST['id'];
+	$amount=$_POST['amount'];
+	$url = "https://test.oppwa.com/v1/payments/".$id."";
 	$data = "entityId=8a8294174d0595bb014d05d82e5b01d2" .
-                "&paymentType=RV";
+                "&paymentType=RV".
+                "&currency=EUR".
+                "&amount=".$amount."";
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);

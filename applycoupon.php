@@ -6,10 +6,12 @@ try{
 
 	$post = file_get_contents('php://input');
 preg_match('/(?<=cartid":").+?(?=")/',$post,$cartid);
+preg_match('/(?<=shop":").+?(?=")/',$post,$shop);
 preg_match('/(?<=customerid":").+?(?=")/',$post,$customerid);
 preg_match('/(?<=couponcode":").+?(?=")/',$post,$couponcode);
 if(!isset($cartid[0])&&!isset($password[0])){
 preg_match('/(?<=cartid=).+?(?=&|$)/',$post,$cartid);
+preg_match('/(?<=shop=).+?(?=&|$)/',$post,$shop);
 preg_match('/(?<=customerid=).+?(?=&|$)/',$post,$customerid);
 preg_match('/(?<=couponcode=).+?(?=&|$)/',$post,$couponcode);
 }
@@ -27,7 +29,9 @@ $count=sql_selectcount($getcouponid,$conn);
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 preg_match('/(?<=validdatestart":").+?(?=")/',$MyJsonData,$validdatestart);
 preg_match('/(?<=validdateend":").+?(?=")/',$MyJsonData,$validdateend);
+preg_match('/(?<=shop":").+?(?=")/',$MyJsonData,$shopid);
 
+if($shop[0]==$shopid[0]||$shopid[0]==''||$shopid[0]==null){
 
 if($count>0){
 $checkcoupon='SELECT * FROM orders WHERE coupon="'.$id[0].'" and customer="'.$customerid[0].'"';
@@ -83,7 +87,10 @@ echo '{"Message":"this coupon doesn\'t exist"}';
 http_response_code(401);
 
 }
-
+}else{
+echo '{"Message":"wrong use of coupon"}';
+http_response_code(401);	
+}
 
 }catch(Exception $e){
 http_response_code(400);

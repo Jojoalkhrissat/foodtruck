@@ -14,3 +14,24 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+  
+ <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
+
+<script type="text/javascript">
+    function setCookie(key, value, expiry) {
+  var expires = new Date();
+  expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
+  document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+}
+function googleTranslateElementInit() {
+    setCookie('googtrans', '/en/ar',1);
+    new google.translate.TranslateElement({
+       pageLanguage: 'en'
+    }, 'google_translate_element');
+}
+googleTranslateElementInit();
+</script>
+
+
+

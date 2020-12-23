@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 	try{
 		if($customerid==""){
 
-$searchterm="SELECT I."."id, I.itemname,I.itemnamear,'' as isfavorite,I.description,I.descriptionar,I.preparetime,I.timesamples, I.shop,S.shopname,I.subcategory,SU.subcatname, I.photo,I.photo1,I.photo2, I.price, I.timesold,avg(F.rating) as rating,count(F.rating) as ratingnumber FROM items I left join feedback F on I.id=F.itemid left join shop S on I.shop=S.id left join subcategory SU on I.subcategory=SU.id GROUP By I.id";
+$searchterm="SELECT I".".id, I.itemname,I.itemnamear,'' as isfavorite,I.description,I.descriptionar,I.preparetime,I.timesamples, I.shop,S.shopname,I.subcategory,SU.subcatname, I.photo,I.photo1,I.photo2, I.price, I.timesold,avg(F.rating) as rating,count(F.rating) as ratingnumber FROM items I left join feedback F on I.id=F.itemid left join shop S on I.shop=S.id left join subcategory SU on I.subcategory=SU.id WHERE S.active=1 GROUP By I.id";
 $MyJsonData1 =sql_selectdata($searchterm,$conn);
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
@@ -20,7 +20,7 @@ $getfavorites="SELECT * from favorites where customerid=".$customerid."";
 $MyJsonData=sql_selectdata($getfavorites,$conn);
 preg_match_all('/(?<="itemid":").+?(?=")/', $MyJsonData,$itemid);
 // print_r($itemid[0]);
-$searchterm="SELECT I."."id, I.itemname,I.itemnamear,MF.customerid as isfavorite,I.description,I.descriptionar,I.preparetime,I.timesamples, I.shop,S.shopname,I.subcategory,SU.subcatname, I.photo,I.photo1,I.photo2, I.price, I.timesold,avg(F.rating) as rating,count(F.rating) as ratingnumber FROM items I left join favorites MF on MF.itemid=I.id left join feedback F on I.id=F.itemid left join shop S on I.shop=S.id left join subcategory SU on I.subcategory=SU.id GROUP By I.id";
+$searchterm="SELECT I."."id, I.itemname,I.itemnamear,MF.customerid as isfavorite,I.description,I.descriptionar,I.preparetime,I.timesamples, I.shop,S.shopname,I.subcategory,SU.subcatname, I.photo,I.photo1,I.photo2, I.price, I.timesold,avg(F.rating) as rating,count(F.rating) as ratingnumber FROM items I left join favorites MF on MF.itemid=I.id left join feedback F on I.id=F.itemid left join shop S on I.shop=S.id left join subcategory SU on I.subcategory=SU.id WHERE S.active=1 GROUP By I.id";
 $MyJsonData1 =sql_selectdata($searchterm,$conn);
 $MyJsonData1 = preg_replace('/,/', '', $MyJsonData1, 1);
 $MyJsonData1=preg_replace('/"rating":null/', '"rating":"1"', $MyJsonData1);

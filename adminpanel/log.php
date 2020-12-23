@@ -44,20 +44,12 @@ switch ($usertype[0]) {
 		case 'ADMIN':
 		$getuserinfo="SELECT * FROM `admin` where id='$adminid[0]'";
 		break;
-		case 'CUSTOMER':
-		$getuserinfo="SELECT * FROM `customers` where id='$customerid[0]'";
-		break;
-		case 'DRIVER':
-		$getuserinfo="SELECT * FROM `drivers` where id='$driverid[0]'";
-		break;
-		case 'SHOP':
-		$getuserinfo="SELECT * FROM `shop` where id='$shopid[0]'";
-		break;
 		default:
+		http_response_code(400);
 		$getuserinfo="";
 		break;
 }
-
+if($getuserinfo!=null&&$getuserinfo!=''){
 $getuser = $conn->query($getuserinfo);
 $getuser->setFetchMode(PDO::FETCH_ASSOC);
 $MyJsonData1="";	
@@ -66,34 +58,19 @@ while($row = $getuser->fetch()):
 	
 	$id= isset($row['id'])?$row['id']:"id";
 	$photo= isset($row['photo'])?$row['photo']:"photo";
-	$shopname=isset($row['shopname'])?$row['shopname']:"shopname";
-	$shopnamear=isset($row['shopnamear'])?$row['shopnamear']:"shopnamear";
 	$firstname=isset($row['firstname'])?$row['firstname']:"firstname";
 	$lastname=isset($row['lastname'])?$row['lastname']:"lastname";
 	$phonenumber=isset($row['phonenumber'])?$row['phonenumber']:"phonenumber";
 	$email=isset($row['email'])?$row['email']:"email";
-	$joindate=isset($row['joindate'])?$row['joindate']:"joindate";
-	$opentime=isset($row['opentime'])?$row['opentime']:"opentime";
-	$closetime=isset($row['closetime'])?$row['closetime']:"closetime";
-	$city=isset($row['city'])?$row['city']:"city";
 	$active=isset($row['active'])?$row['active']:"active";
-	$address=isset($row['address'])?$row['address']:"address";
-	$location=isset($row['location'])?$row['location']:"location";
 	$_SESSION['id']=$id;
 	$_SESSION['photo']=$photo;
-	$_SESSION['shopname']=$shopname;
-	$_SESSION['shopnamear']=$shopnamear;
 	$_SESSION['firstname']=$firstname;
 	$_SESSION['lastname']=$lastname;
 	$_SESSION['phonenumber']=$phonenumber;
 	$_SESSION['email']=$email;
-	$_SESSION['joindate']=$joindate;
-	$_SESSION['opentime']=$opentime;
-	$_SESSION['closetime']=$closetime;
-	$_SESSION['city']=$city;
 	$_SESSION['active']=$active;
-	$_SESSION['address']=$address;
-	$_SESSION['location']=$location;
+
 
 endwhile;
 
@@ -108,7 +85,13 @@ header('location:http://localhost/foodtruck/adminpanel/index');
 }
 
 
+}else{
+	http_response_code(401);
+	echo '[{"message":"you don\'t have access"}]';
+	header('location:http://localhost/foodtruck/adminpanel/login');
 
+
+}
 
 
 }else{

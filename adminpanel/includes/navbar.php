@@ -96,21 +96,46 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="profile">
-                    <i class="fas fa-fw fa-truck"></i>
-                    <span>Food truck profile</span></a>
+                    <i class="fas fa-fw fa-user-alt"></i>
+                    <span>profile</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="subcategories">
+                <a class="nav-link" href="categories">
                     <i class="fas fa-fw fa-hamburger"></i>
-                    <span>Sub categories</span></a>
+                    <span>categories</span></a>
             </li>
 
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="items">
-                    <i class="fas fa-fw fa-pizza-slice"></i>
-                    <span>items</span></a>
+                <a class="nav-link" href="shopprofiles">
+                    <i class="fas fa-fw fa-truck"></i>
+                    <span>shops</span></a>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link" href="ordersinprogress">
+                    <i class="fas fa-fw fa-clipboard-list"></i>
+                    <span>orders in progress</span></a>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link" href="reports.php">
+                    <i class="fas fa-fw fa-flag"></i>
+                    <span>reports</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="customers.php">
+                    <i class="fas fa-fw fa-user-alt"></i>
+                    <span>customers</span></a>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link" href="coupon.php">
+                    <i class="fas fa-fw fa-newspaper"></i>
+                    <span>coupons</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="readyorders">
+                    <i class="fas fa-fw fa-clipboard-list"></i>
+                    <span>ready orders</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -210,7 +235,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="profile">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php 
-                                echo $_SESSION['shopname'];
+                                echo $_SESSION['firstname'].' '.$_SESSION['lastname'];
                                 ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="../<?php echo $_SESSION['photo'];?>">

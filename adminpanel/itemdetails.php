@@ -1,7 +1,7 @@
 
 <?php   
 require "connect.php";
-session_start();
+
 
 
 $itemid=isset($_GET['item'])&&$_GET['item']!=''?$_GET['item']:$_SESSION['item'];

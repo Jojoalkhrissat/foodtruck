@@ -11,7 +11,7 @@ preg_match('/(?<=email=).+?(?=&|$)/',$post,$email);
 
 }
 
-$checkuser ='SELECT * FROM customers WHERE email="'.$email[0].'"';
+$checkuser ='SELECT * FROM customer WHERE email="'.$email[0].'"';
 $count=sql_selectcount($checkuser,$conn);
 
 if($count==1){

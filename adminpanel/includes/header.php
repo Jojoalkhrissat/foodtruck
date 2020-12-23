@@ -1,3 +1,23 @@
+<?php
+session_start();
+if(!isset($_SESSION['id'])){
+
+header('location:http://localhost/foodtruck/adminpanel/login');
+	
+}
+
+
+
+
+
+
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,10 +43,15 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
+<style type="text/css">.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+    } 
+body {
+    top: 0px !important; 
+    }</style>
 </head>
 
 <body id="page-top">
-
+<!-- <div id="google_translate_element"></div> -->
     <!-- Page Wrapper -->
     <div id="wrapper">

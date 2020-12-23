@@ -1,6 +1,6 @@
 
 <?php   
-session_start();
+
 include('includes/header.php');
 include('includes/navbar.php');
 ?>
@@ -20,15 +20,6 @@ include('includes/navbar.php');
         <div class="modal-body">
 
             <div class="form-group">
-                <label> shop name </label>
-                <input type="text" name="shopname" class="form-control" placeholder="Enter shop name">
-            </div>
-            <div class="form-group">
-                <label>shop name ar</label>
-                <input type="text" name="shopnamear" class="form-control" placeholder="Enter shop name ar">
-                
-            </div>
-            <div class="form-group">
                 <label>first name</label>
                 <input type="text" name="firstname" class="form-control" placeholder="Enter first name">
             </div>
@@ -40,25 +31,7 @@ include('includes/navbar.php');
                 <label>phone number</label>
                 <input type="text" name="phonenumber" class="form-control" placeholder="Enter your phone number">
             </div>
-<div class="form-group">
-                <label> open time </label>
-                <input type="time" name="opentime" class="form-control" placeholder="Enter open time">
-            </div>
-            <div class="form-group">
-                <label>close time</label>
-                <input type="time" name="closetime" class="form-control">
-                
-            </div>
-            <div class="form-group">
-                <label>city</label>
-                <input type="text" name="city" class="form-control" placeholder="Enter city">
-            </div>
-            
-            <div class="form-group">
-                <label>address</label>
-                <input type="text" name="address" class="form-control" placeholder="Enter address">
-                
-            </div>
+
              <div class="form-group">
                 <label>photo</label>
                 <input type="file" name="shopphoto" class="form-control">
@@ -95,38 +68,22 @@ include('includes/navbar.php');
  	<tr>
  		<th>id</th>
  		<th>photo</th>
- 		<th>shopname</th>
- 		<th>shop name ar</th>
  		<th>first name</th>
       <th>last name</th>
     <th>phone number</th>
     <th>email</th>
-    <th>join date</th>
-    <th>open time</th>
-      <th>close time</th>
-    <th>city</th>
     <th>active</th>
-    <th>address</th>
-    <th>location</th>
  	</tr>
  </thead>
 <tbody>
 	<tr>
 		<td><?php echo $_SESSION['id'];?></td>
-		<td><?php echo '<img src="../'.$_SESSION['photo'].'" style="width:100%;">';?></td>
-		<td><?php echo $_SESSION['shopname'];?></td>
-		<td><?php echo $_SESSION['shopnamear'];?></td>
+		<td> <center><?php echo '<img src="../'.$_SESSION['photo'].'" style="width:50%;">';?></center></td>
 		<td><?php echo $_SESSION['firstname'];?></td>
         <td><?php echo $_SESSION['lastname'];?></td>
     <td><?php echo $_SESSION['phonenumber'];?></td>
     <td><?php echo $_SESSION['email'];?></td>
-    <td><?php echo $_SESSION['joindate'];?></td>
-    <td><?php echo $_SESSION['opentime'];?></td>
-        <td><?php echo $_SESSION['closetime'];?></td>
-    <td><?php echo $_SESSION['city'];?></td>
     <td><?php echo $_SESSION['active'];?></td>
-    <td><?php echo $_SESSION['address'];?></td>
-    <td><?php echo $_SESSION['location'];?></td>
 	</tr>
 </tbody>
 
@@ -135,6 +92,7 @@ include('includes/navbar.php');
 </div>
 </div>
 </div>
+</div></div>
 </div>
 
 
