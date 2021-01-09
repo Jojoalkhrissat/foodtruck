@@ -1,3 +1,4 @@
+
 function getLocation(callback) {
     if (navigator.geolocation) {
         var lat_lng = navigator.geolocation.getCurrentPosition(function(position){

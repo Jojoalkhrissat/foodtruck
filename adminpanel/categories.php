@@ -1,6 +1,7 @@
 
 <?php   
-require "connect.php";
+require "../connect.php";
+require "../sql.php";
 
 include('includes/header.php');
 include('includes/navbar.php');
@@ -47,9 +48,9 @@ while($row = $getsubcategories->fetch()):
 	echo '<tr>';
 		
 
-echo "<td><center><a href=/foodtruck/adminpanel/categorydetails?category=".$row['id']."><label>".$row['catname']."</label></a></center></td>";
-echo "<td><center><a href=/foodtruck/adminpanel/categorydetails?category=".$row['id']."><img id='".$row['id']."' src='../".$row['photo']."' style='width:30%;'></a></center></td>";
-
+echo "<td><center><a href=categorydetails?category=".$row['id']."><label>".$row['catname']."</label></a></center></td>";
+echo "<td><center><a href=categorydetails?category=".$row['id']."><img id='".$row['id']."' src='../".$row['photo']."' style='width:30%;'></a></center></td>";
+echo "<td><center><a href=deletecategory?category=".$row['id']." class='btn btn-primary'>delete category</a></center></td>";
 
 
 
@@ -74,37 +75,22 @@ endwhile;
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="addsubcat.php" method="POST" enctype="multipart/form-data">
+      <form action="addcat.php" method="POST" enctype="multipart/form-data">
 
         <div class="modal-body">
 
             <div class="form-group">
                 <label> name </label>
-                <input type="text" name="subcatname" class="form-control" placeholder="Enter subcategory name">
+                <input type="text" name="subcatname" class="form-control" placeholder="Enter category name">
             </div>
             <div class="form-group">
                 <label>name ar</label>
-                <input type="text" name="subcatnamear" class="form-control" placeholder="Enter subcategory name ar">
+                <input type="text" name="subcatnamear" class="form-control" placeholder="Enter category name ar">
                 
             </div>
+          
             <div class="form-group">
-                <label>category</label>
-
-                <select name="category" class="form-control"> 
-                	 <?php 
-$categories='SELECT * FROM category';
-
-$getcategories = $conn->query($categories);
-$getcategories->setFetchMode(PDO::FETCH_ASSOC);
-while($row = $getcategories->fetch()):
-	echo "<option value='".$row['id']."'>".$row['catname']."</option>";
-	endwhile;
-                ?>
-       
-                </select>
-            </div>
-            <div class="form-group">
-                <label>sub category photo</label>
+                <label>category photo</label>
                 <input type="file" name="subcatimage" class="form-control">
             </div>
 

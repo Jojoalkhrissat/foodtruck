@@ -1,6 +1,6 @@
 
 <?php
-require 'connect.php';
+require "../connect.php";
 $id=$_GET['coupon'];   
 
 include('includes/header.php');

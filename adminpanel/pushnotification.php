@@ -1,6 +1,6 @@
 <?php
-require "connect.php";
-require "sql.php";
+require "../connect.php";
+require "../sql.php";
 function pushnotifications($customer,$title,$titlear,$body,$bodyar){
 $gettok="SELECT * from deviceindex where customer=".$customer;
 $MyJsonData=sql_selectdata($gettok,$conn);

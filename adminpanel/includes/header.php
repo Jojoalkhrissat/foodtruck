@@ -2,7 +2,7 @@
 session_start();
 if(!isset($_SESSION['id'])){
 
-header('location:http://localhost/foodtruck/adminpanel/login');
+header('location:'.$baseurl.'/adminpanel/login');
 	
 }
 

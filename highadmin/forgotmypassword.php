@@ -1,6 +1,6 @@
 <?php
-require "connect.php";
-require "sql.php";
+require "../connect.php";
+require "../sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 	session_start();
@@ -40,7 +40,7 @@ $msg = "Hi, this is the food truck application password forgot service,your code
 $msg = wordwrap($msg,70);
 
 mail($email,"forgot your password",$msg);
-header("Location: http://localhost/foodtruck/highadmin/entercode");
+header("Location:".$baseurl."/highadmin/entercode");
 
 }else{
 echo "<h1>Wrong Email</h1>";
@@ -49,7 +49,7 @@ echo "<h1>Wrong Email</h1>";
 sleep(10);
 
 
-header("Location: http://localhost/foodtruck/highadmin/forgot-password");
+header("Location:".$baseurl."/highadmin/forgot-password");
 }
 
 

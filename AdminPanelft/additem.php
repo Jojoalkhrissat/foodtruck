@@ -1,5 +1,5 @@
 <?php
-require "connect.php";
+require "../connect.php";
 
 	function time_to_decimal($time) {
     $timeArr = explode(':', $time);
@@ -272,7 +272,7 @@ $createsubcat->execute();
 
 
 
-header('location:http://localhost/foodtruck/adminpanelft/items');
+header('location:'.$baseurl.'/adminpanelft/items');
 
 
 ?>

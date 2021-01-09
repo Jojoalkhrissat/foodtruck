@@ -1,6 +1,6 @@
 
 <?php   
-require "connect.php";
+require "../connect.php";
 $cat=$_GET['category'];
 include('includes/header.php');
 include('includes/navbar.php');

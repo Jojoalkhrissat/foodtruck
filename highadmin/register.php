@@ -1,5 +1,5 @@
 <?php
-require "connect.php";
+require "../connect.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 session_start();
 
@@ -208,7 +208,7 @@ echo "<h1>Some Data is not there, please go back and set the data</h1>";
 sleep(10);
 
 
-header('location:http://localhost/foodtruck/highadmin/reg.php');
+header('location:'.$baseurl.'/highadmin/reg.php');
 
 
 

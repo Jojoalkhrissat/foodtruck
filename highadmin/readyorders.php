@@ -12,8 +12,8 @@
 
 
 <?php
-require 'connect.php';
-require 'sql.php';   
+require "../connect.php";
+require "../sql.php";   
 
 
 

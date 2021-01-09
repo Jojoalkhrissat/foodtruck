@@ -1,6 +1,6 @@
 <?php
-require "connect.php";
-require "sql.php";
+require "../connect.php";
+require "../sql.php";
 	
   session_start();
 $customer= $_GET['customerid'];
@@ -77,7 +77,7 @@ echo '[{"message":"your item was entered"}]';
 
 
 
-header('location:http://localhost/foodtruck/highadmin/customerdetails?customerid='.$customer.'');
+header('location:'.$baseurl.'/highadmin/customerdetails?customerid='.$customer.'');
 
 
 ?>

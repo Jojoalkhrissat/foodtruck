@@ -34,8 +34,13 @@ else{
 $MyJsonData1 = str_replace('"shop":"'.$id[0].'"', '"shop":"'.$id[0].'","available":"false"', $MyJsonData1);
 
 }
+$billing= 'SELECT * from billinginfo where customerid='.$customerid;
+$MyJsonData2=sql_selectdata($billing,$conn);
+ $MyJsonData2=str_replace('}', '',$MyJsonData2);
+ $MyJsonData2=str_replace('{','', $MyJsonData2);
+$MyJsonData2=preg_replace('/"id":".+?"\,/','', $MyJsonData2);
 
-
+$MyJsonData1=str_replace('}', $MyJsonData2.'}',$MyJsonData1);
 }else{
 	
 }

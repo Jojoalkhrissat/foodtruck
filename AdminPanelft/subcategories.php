@@ -1,6 +1,6 @@
 
 <?php   
-require "connect.php";
+require "../connect.php";
 
 include('includes/header.php');
 include('includes/navbar.php');
@@ -47,8 +47,8 @@ while($row = $getsubcategories->fetch()):
 	echo '<tr>';
 		
 
-echo "<td><center><a href=/foodtruck/adminpanelft/itemspersubcat?subcat=".$row['id']."><label>".$row['subcatname']."</label></a></center></td>";
-echo "<td><center><a href=/foodtruck/adminpanelft/itemspersubcat?subcat=".$row['id']."><img id='".$row['id']."' src='../".$row['photo']."' style='width:50%;'></a></center></td>";
+echo "<td><center><a href=itemspersubcat?subcat=".$row['id']."><label>".$row['subcatname']."</label></a></center></td>";
+echo "<td><center><a href=itemspersubcat?subcat=".$row['id']."><img id='".$row['id']."' src='../".$row['photo']."' style='width:50%;'></a></center></td>";
 
 
 

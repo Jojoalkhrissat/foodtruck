@@ -5,7 +5,7 @@ $user = "root";
 $passwd = "";
 try{
 $conn=new PDO($dsn,$user,$passwd);
-
+$baseurl='https://localhost/foodtruck';
 }
 catch(Exception $e) {
 echo "System Error";

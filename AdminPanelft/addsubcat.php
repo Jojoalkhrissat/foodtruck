@@ -135,7 +135,7 @@ $createsubcat->execute();
 
 
 
-header('location:http://localhost/foodtruck/adminpanelft/subcategories');
+header('location:'.$baseurl.'/adminpanelft/subcategories');
 
 
 ?>

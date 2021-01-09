@@ -1,5 +1,5 @@
 <?php
-require "connect.php";
+require "../connect.php";
 
 	function time_to_decimal($time) {
     $timeArr = explode(':', $time);
@@ -98,7 +98,7 @@ $admin= 'INSERT INTO `coupons`(`couponname`, `couponcode`, `shop`, `validdatesta
 
 
 
-header('location:http://localhost/foodtruck/highadmin/coupon');
+header('location:'.$baseurl.'/highadmin/coupon');
 
 
 ?>

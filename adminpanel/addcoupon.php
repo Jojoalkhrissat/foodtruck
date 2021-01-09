@@ -1,5 +1,6 @@
 <?php
-require "connect.php";
+require "../connect.php";
+require "../sql.php";
 
 	function time_to_decimal($time) {
     $timeArr = explode(':', $time);
@@ -44,7 +45,12 @@ $validdateend=$_POST['validdateend'];
 
 
 
-$admin= 'INSERT INTO `coupons`(`couponname`, `couponcode`, `shop`, `validdatestart`, `validdateend`,`discount`) VALUES ("'.$couponname.'", "'.$couponcode.'", "'.$shop.'", "'.$validdatestart.'", "'.$validdateend.'","'.$discount.'")';
+$addcoup= 'INSERT INTO `coupons`(`couponname`, `couponcode`, `shop`, `validdatestart`, `validdateend`,`discount`) VALUES ("'.$couponname.'", "'.$couponcode.'", "'.$shop.'", "'.$validdatestart.'", "'.$validdateend.'","'.$discount.'")';
+
+
+
+
+sql_insert($addcoup,$conn);
 
 
 
@@ -93,12 +99,7 @@ $admin= 'INSERT INTO `coupons`(`couponname`, `couponcode`, `shop`, `validdatesta
 
 
 
-
-
-
-
-
-header('location:http://localhost/foodtruck/adminpanel/coupon');
+header('location:'.$baseurl.'/adminpanel/coupon');
 
 
 ?>

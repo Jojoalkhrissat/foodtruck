@@ -1,5 +1,5 @@
 <?php
-require "connect.php";
+require "../connect.php";
 
   session_start();
 $termsandconditions=$_POST["termsandconditions"];
@@ -70,7 +70,7 @@ echo '[{"message":"your item was entered"}]';
 
 
 
-header('location:http://localhost/foodtruck/highadmin/termsandconditions');
+header('location:'.$baseurl.'/highadmin/termsandconditions');
 
 
 ?>

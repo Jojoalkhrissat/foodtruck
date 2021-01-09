@@ -1,6 +1,6 @@
 <?php
-require "connect.php";
-
+require "../connect.php";
+require "../sql.php";
   session_start();
   $id=$_SESSION["category"];
 $shop= $_SESSION["id"];
@@ -141,7 +141,7 @@ $createsubcat->execute();
 
 
 
-header('location:http://localhost/foodtruck/adminpanel/categorydetails?category='.$id.'');
+header('Location: '.$baseurl.'/adminpanel/categorydetails?category='.$id.'');
 
 
 ?>

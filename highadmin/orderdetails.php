@@ -1,6 +1,6 @@
 <?php
-require 'connect.php';
-require 'sql.php';   
+require "../connect.php";
+require "../sql.php";   
 include('includes/header.php');
 include('includes/navbar.php');
 

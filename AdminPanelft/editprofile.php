@@ -1,6 +1,6 @@
 <?php
-require"connect.php";
-require"sql.php";
+require "../connect.php";
+require "../sql.php";
 session_start();
 
 	$shopname=isset($_POST['shopname'])&&$_POST['shopname']!=''?$_POST['shopname']:$_SESSION['shopname'];
@@ -94,7 +94,7 @@ echo $modifyphoto;
 }
 
 
-header("Location: http://localhost/foodtruck/adminpanelft/profile.php");
+header("Location: ".$baseurl."/adminpanelft/profile.php");
 
 
 

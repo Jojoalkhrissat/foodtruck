@@ -1,7 +1,7 @@
 
 
 <?php   
-require "connect.php";
+require "../connect.php";
 session_start();
 
 $shop=$_SESSION['id'];
@@ -50,8 +50,8 @@ while($row = $getitemspershop->fetch()):
 	echo '<tr>';
 		
 
-echo "<td><center><a href=/foodtruck/highadmin/itemdetails?item=".$row['id']."><label>".$row['itemname']."</label></a></center></td>";
-echo "<td><center><a href=/foodtruck/highadmin/itemdetails?item=".$row['id']."><img id='".$row['id']."' src='../".$row['photo']."' style='width:50%;'></a></center></td>";
+echo "<td><center><a href=itemdetails?item=".$row['id']."><label>".$row['itemname']."</label></a></center></td>";
+echo "<td><center><a href=itemdetails?item=".$row['id']."><img id='".$row['id']."' src='../".$row['photo']."' style='width:50%;'></a></center></td>";
 
 
 

@@ -157,6 +157,11 @@
                     <i class="fas fa-fw fa-ad"></i>
                     <span>ads</span></a>
             </li>
+             <li class="nav-item">
+                <a class="nav-link" href="global">
+                    <i class="fas fa-fw fa-ad"></i>
+                    <span>global notifications</span></a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw"></i>

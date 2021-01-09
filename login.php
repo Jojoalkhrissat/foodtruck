@@ -12,7 +12,7 @@ preg_match('/(?<=username=).+?(?=&|$)/',$post,$username);
 preg_match('/(?<=password=).+?(?=&|$)/',$post,$password);
 preg_match('/(?<=token=).+?(?=&|$)/',$post,$token);
 }
-$checkuser ="SELECT id,usertype,adminid,customerid,driverid FROM `loginandregister` WHERE username=".$username[0]." AND password=".$password[0]."";
+$checkuser ="SELECT id,usertype,adminid,customerid,driverid FROM `loginandregister` WHERE username='".$username[0]."' AND password='".$password[0]."'";
 $count=sql_selectcount($checkuser,$conn);
 if($count==1){
 echo '[';
@@ -50,6 +50,8 @@ $MyJsonData1 = preg_replace('/(?<=":)null(?=\,)/', '""', $MyJsonData1);
 preg_match('/(?<=active":").+?(?=")/',$MyJsonData1,$active);
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData1,$customerid2);
 if($active=1){
+	$tokenempty='DELETE FROM deviceindex where customer="'.$customerid2[0].'"';
+sql_delete($tokenempty,$conn);
 $token='INSERT INTO `deviceindex`(`customer`, `devicetoken`) VALUES ("'.$customerid2[0].'","'.$token[0].'")';
 sql_insert($token,$conn);
 echo $MyJsonData1;

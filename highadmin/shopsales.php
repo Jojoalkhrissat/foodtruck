@@ -1,6 +1,6 @@
 <?php
-require 'connect.php';
-require 'sql.php';   
+require "../connect.php";
+require "../sql.php";   
 
 include('includes/header.php');
 include('includes/navbar.php');
@@ -90,7 +90,7 @@ preg_match('/(?<=ordercount":").+?(?=")/', $MyJsonData4,$ordercounton);
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="index.php" method="GET">
+      <form action="shopsales.php" method="GET">
 
         <div class="modal-body">
 
@@ -103,7 +103,7 @@ preg_match('/(?<=ordercount":").+?(?=")/', $MyJsonData4,$ordercounton);
                 <input type="date" name="enddate" class="form-control checking_email">
                 <small class="error_email" style="color: red;"></small>
             </div>
-            
+            <input type="text" name="shopid" value="<?php echo $shop;?>" hidden>
 
 
         </div>

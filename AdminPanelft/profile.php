@@ -76,7 +76,41 @@ include('includes/navbar.php');
     </div>
   </div>
 </div>
+<div class="modal fade" id="changeloc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="editlocation.php" method="POST" enctype="multipart/form-data">
 
+        <div class="modal-body">
+
+            <div class="form-group">
+                <label> shop location </label>
+            
+             
+            </div>
+            
+              
+           
+            
+        </div>
+<div id="map"></div>
+ <input type="text" name="shoplat" id="shoplat" hidden>
+             <input type="text" name="shoplong" id="shoplong" hidden>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" name="registerbtn" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
 
 
 <div class="container">
@@ -88,6 +122,18 @@ include('includes/navbar.php');
 </button>
 </h6>
 </div>
+
+
+<div class="card-header py-3">
+ <h6 class="m-0 font-weight-bold text-primary"> 
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changeloc">
+       edit location 
+</button>
+</h6>
+</div>
+
+
+
 <div class="card-body">
 <div class="table-responsive">
 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -146,7 +192,7 @@ include('includes/navbar.php');
 
 
 
-
+<script type="text/javascript" src="map.js"></script>
 
 
 

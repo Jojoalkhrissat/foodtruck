@@ -1,6 +1,6 @@
 
 <?php
-require 'connect.php'; 
+require "../connect.php"; 
 $shop=$_GET['shop'];  
 
 include('includes/header.php');

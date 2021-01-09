@@ -3,7 +3,7 @@
 session_start();
 if(!isset($_SESSION['id'])){
 
-header('location:http://localhost/foodtruck/adminpanelft/login');
+header('location:'.$baseurl.'/adminpanelft/login');
 	
 }
 
@@ -40,6 +40,18 @@ header('location:http://localhost/foodtruck/adminpanelft/login');
 body {
     top: 0px !important; 
     }</style>
+
+
+<script type="text/javascript"
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5Jrp9PtHe0WapppUzxbIpMDWMAcV3qE4"></script>
+  <script src="https://unpkg.com/location-picker/dist/location-picker.min.js"></script>
+  <style type="text/css">
+    #map {
+      width: 100%;
+      height: 600px;
+    }
+  </style>
+
 </head>
 
 <body id="page-top">

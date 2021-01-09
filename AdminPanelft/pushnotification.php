@@ -1,8 +1,8 @@
 <?php
-require "connect.php";
-// require "sql.php";
+require "../connect.php";
+// require "../sql.php";
 function pushnotifications($customer,$title,$titlear,$body,$bodyar){
-    require "connect.php";
+    require "../connect.php";
 $gettok="SELECT * from deviceindex where customer=".$customer;
 $statement = $conn->query($gettok);
 $statement->setFetchMode(PDO::FETCH_ASSOC);

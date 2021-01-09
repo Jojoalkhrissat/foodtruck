@@ -1,6 +1,7 @@
+
 <?php
-require "connect.php";
-require "sql.php";
+require "../connect.php";
+require "../sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 
@@ -37,7 +38,7 @@ sql_delete($removeentry,$conn);
 
 
 echo '[{"Message":"you changed your password successfully"}]';
-header("Location: http://localhost/foodtruck/highadmin/login");
+header("Location:".$baseurl."/highadmin/login");
 
 
 
@@ -61,19 +62,19 @@ header("Location: http://localhost/foodtruck/highadmin/login");
 }else{
 echo "<h1>make sure the two passwords match</h1>";
 sleep(10);
-header("Location: http://localhost/foodtruck/highadmin/entercode");
+header("Location:".$baseurl."/highadmin/entercode");
 }
 
 
 }else{
 http_response_code(401);
-header("Location: http://localhost/foodtruck/highadmin/forgot-password");
+header("Location:".$baseurl."/highadmin/forgot-password");
 }
 
 }else{
 echo "<h1>make sure the two passwords match</h1>";	
 sleep(5);
-header("Location: http://localhost/foodtruck/highadmin/entercode");
+header("Location:".$baseurl."/highadmin/entercode");
 
 }
 

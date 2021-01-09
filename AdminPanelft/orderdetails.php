@@ -1,6 +1,7 @@
+
 <?php
-require 'connect.php';
-require 'sql.php';   
+require "../connect.php";
+require "../sql.php";   
 
 include('includes/header.php');
 include('includes/navbar.php');
@@ -41,9 +42,10 @@ if(!isset($_GET['ref'])){
 </div>';
 }
 if(isset($_GET['ref2'])){
+  
  echo '<div class="card-header py-3">
  <h6 class="m-0 font-weight-bold text-primary"> 
-<a href="orderready?ordernumber="'.$ordernumber.'" class="btn btn-primary">
+<a href="orderready?ordernumber='.$ordernumber.'" class="btn btn-primary">
        ready order 
 </a>
 </h6>
@@ -51,9 +53,10 @@ if(isset($_GET['ref2'])){
 </div>';
 }
 if(isset($_GET['ref3'])){
+
  echo '<div class="card-header py-3">
  <h6 class="m-0 font-weight-bold text-primary"> 
-<a href="completeorder?ordernumber="'.$ordernumber.'" class="btn btn-primary">
+<a href="completeorder?ordernumber='.$ordernumber.'" class="btn btn-primary">
        complete order 
 </a>
 </h6>

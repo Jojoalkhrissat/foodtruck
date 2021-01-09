@@ -1,6 +1,6 @@
 <?php
-require"connect.php";
-require"sql.php";
+require "../connect.php";
+require "../sql.php";
 session_start();
 
 	
@@ -12,7 +12,7 @@ session_start();
 	$_SESSION['lastname']=$lastname;
 	$_SESSION['phonenumber']=$phonenumber;
 
-$modifyshop='UPDATE `admin` SET `firstname`="'.$firstname.'",`lastname`="'.$lastname.'",`phonenumber`="'.$phonenumber.'" WHERE id="'.$_SESSION['id'].'" ';
+$modifyshop='UPDATE `highadmin` SET `firstname`="'.$firstname.'",`lastname`="'.$lastname.'",`phonenumber`="'.$phonenumber.'" WHERE id="'.$_SESSION['id'].'" ';
 echo $modifyshop;
 sql_update($modifyshop,$conn);
 
@@ -24,7 +24,7 @@ if(!empty($_FILES['shopphoto']['tmp_name'])){
 if(file_exists($_FILES['shopphoto']['tmp_name'])){
 
 
-$target_dir = "../img/profile/admin/";
+$target_dir = "../img/profile/admin/high";
 
 $uploadOk = 1;
 
@@ -65,7 +65,7 @@ if ($uploadOk == 0) {
 } else {
   if (move_uploaded_file($_FILES["shopphoto"]["tmp_name"], $target_file)) {
   	$target_file=preg_replace('/\.\.\//', '', $target_file);
-    $modifyphoto='UPDATE `admin` SET photo="'.$target_file.'" where id="'.$_SESSION['id'].'"';
+    $modifyphoto='UPDATE `highadmin` SET photo="'.$target_file.'" where id="'.$_SESSION['id'].'"';
     
 echo $modifyphoto;
     sql_update($modifyphoto,$conn);
@@ -80,7 +80,7 @@ echo $modifyphoto;
 }
 
 
-header("Location: http://localhost/foodtruck/highadmin/profile.php");
+header("Location:".$baseurl."/highadmin/profile.php");
 
 
 

@@ -1,6 +1,6 @@
 
 <?php
-require 'connect.php';  
+require "../connect.php";  
 $admin=$_GET['admin']; 
 
 include('includes/header.php');

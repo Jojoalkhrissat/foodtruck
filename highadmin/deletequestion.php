@@ -1,6 +1,6 @@
 <?php
-require "connect.php";
-require "sql.php";
+require "../connect.php";
+require "../sql.php";
 
   session_start();
 $question=$_GET['question'];
@@ -73,7 +73,7 @@ echo '[{"message":"your item was entered"}]';
 
 
 
-header('location:http://localhost/foodtruck/highadmin/faq');
+header('location:'.$baseurl.'/highadmin/faq');
 
 
 ?>

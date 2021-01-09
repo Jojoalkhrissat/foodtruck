@@ -1,6 +1,6 @@
 <?php
-require"connect.php";
-require"sql.php";
+require "../connect.php";
+require "../sql.php";
 session_start();
 
 	
@@ -80,7 +80,7 @@ echo $modifyphoto;
 }
 
 
-header("Location: http://localhost/foodtruck/adminpanel/profile.php");
+header('Location: '.$baseurl.'/adminpanel/profile.php");
 
 
 

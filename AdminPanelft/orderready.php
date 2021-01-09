@@ -1,6 +1,6 @@
 <?php
-require 'connect.php';
-require 'sql.php';  
+require "../connect.php";
+require "../sql.php";  
 require 'pushnotification.php';   
 session_start();
 if(isset($_SESSION['id'])){
@@ -17,6 +17,7 @@ $orderend=date('yy-m-d H:i:s');
 
 
 $getorderid='SELECT * from orders where id="'.$orderid.'"';
+echo $getorderid;
 $MyJsonData=sql_selectdata($getorderid,$conn);
 preg_match('/(?<=customer":").+?(?=")/',$MyJsonData,$customer);
 
@@ -56,9 +57,9 @@ sql_update($accept,$conn);
 
 
 
-header('location:http://localhost/foodtruck/adminpanelft/ordersinprogress');
+header('location:'.$baseurl.'/adminpanelft/ordersinprogress');
 }else{
-	header('location:http://localhost/foodtruck/adminpanelft/ordersinprogress');
+	header('location:'.$baseurl.'/adminpanelft/ordersinprogress');
 }
 
 

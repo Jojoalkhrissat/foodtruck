@@ -1,6 +1,7 @@
 <?php
 require "connect.php";
 require "sql.php";
+require "pushnotification.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$post = file_get_contents('php://input');
 preg_match('/(?<=customerid":").+?(?=")/',$post,$customerid);
@@ -21,7 +22,17 @@ $getorder='SELECT * FROM orders WHERE customer="'.$customerid[0].'" and status="
 $MyJsonData=sql_selectdata($getorder,$conn);
 preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 preg_match('/(?<=timeforready":").+?(?=")/',$MyJsonData,$timeforready);
+preg_match('/(?<=shop":").+?(?=")/',$MyJsonData,$shop);
 // $minutes_to_add=intval($timeforready[0]);
+
+
+
+
+
+pushnotifications($shop[0],'you have an order to make','لديك طلب لتصنعه','client number '.$customerid[0].' has ordered from you','العميل رقم '.$customerid[0].'قد طلب منك طلب');
+
+
+
 
 $getitemquantity='SELECT OE'.'.item,OE.count,I.itemname,I.quantity from orderelements OE, items I where OE.item=I.id and OE.ordernumber='.$id[0].'';
 $MyJsonData5=sql_selectdata($getitemquantity,$conn);
@@ -62,7 +73,8 @@ preg_match('/(?<=timeforready":").+?(?=")/',$MyJsonData,$timeforready);
 $order= 'UPDATE orders SET status="IN DISPATCH",coupon='.$couponid[0].',paymentmethod="CASH",orderstart='.'CURRENT_TIME WHERE customer="'.$customerid[0].'" and status="CART"'; 
 
 sql_update($order,$conn);
-
+$couponused= 'UPDATE coupons SET timesused=timesused+1 where id='.$couponid.[0]'';
+sql_update($couponused,$conn);
 }
 
 
@@ -115,7 +127,8 @@ preg_match('/(?<=id":").+?(?=")/',$MyJsonData,$id);
 $order= 'UPDATE orders SET status="IN DISPATCH",coupon='.$couponid[0].',paymentmethod="ONLINE",orderstart='.'CURRENT_TIME WHERE customer="'.$customerid[0].'" and status="CART"'; 
 
 sql_update($order,$conn);
-
+$couponused= 'UPDATE coupons SET timesused=timesused+1 where id='.$couponid.[0]'';
+sql_update($couponused,$conn);
 }
 
 

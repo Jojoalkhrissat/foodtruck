@@ -1,6 +1,7 @@
 
 <?php
-require 'connect.php';   
+require "../connect.php";
+require "../sql.php";
 
 include('includes/header.php');
 include('includes/navbar.php');
@@ -32,7 +33,7 @@ include('includes/navbar.php');
     <th>shop</th>
     <th>start date</th>
     <th>end date</th>
-   
+   <th>times used</th>
   </tr>
  </thead>
 <tbody>
@@ -57,7 +58,7 @@ $discount=$row['discount']*100;
     echo '<td>'.$row['shop'].'</td>';
     echo '<td>'.$row['validdatestart'].'</td>';
     echo '<td>'.$row['validdateend'].'</td>';
-   
+   echo '<td>'.$row['timesused'].'</td>';
 echo "<td><a class='btn btn-primary' href='coupondetails.php?coupon=".$row['id']."'>show details</a></td>";
 echo '</tr>';
 endwhile;

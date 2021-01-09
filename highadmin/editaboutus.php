@@ -1,5 +1,5 @@
 <?php
-require "connect.php";
+require "../connect.php";
 
   session_start();
 $about=$_POST["about"];
@@ -70,7 +70,7 @@ echo '[{"message":"your item was entered"}]';
 
 
 
-header('location:http://localhost/foodtruck/highadmin/aboutus');
+header('location:'.$baseurl.'/highadmin/aboutus');
 
 
 ?>

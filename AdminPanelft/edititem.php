@@ -1,5 +1,5 @@
 <?php
-require "connect.php";
+require "../connect.php";
 
   session_start();
   $id=$_SESSION["item"];
@@ -267,7 +267,7 @@ $createsubcat->execute();
 
 
 
-header('location:http://localhost/foodtruck/adminpanelft/itemdetails?item='.$id.'');
+header('location:'.$baseurl.'/adminpanelft/itemdetails?item='.$id.'');
 
 
 ?>

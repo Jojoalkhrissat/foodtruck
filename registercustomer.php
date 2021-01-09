@@ -124,9 +124,9 @@ switch (true) {
 file_put_contents($myfile,$contents);
 }
 
-$MyJsonData = preg_replace('/Photo":".+?"/', 'Photo":"'.$myfile.'"', $MyJsonData);
+$MyJsonData = preg_replace('/photo":".+?"/', 'photo":"'.$myfile.'"', $MyJsonData);
 
-$addphoto= 'UPDATE customers set Photo="'.$myfile.'" where phonenumber="'.$phonenumber[0].'"'; 
+$addphoto= 'UPDATE customers set photo="'.$myfile.'" where phonenumber="'.$phonenumber[0].'"'; 
 sql_update($addphoto,$conn);
 $fetchuserinfo='SELECT * FROM customers WHERE phonenumber="'.$phonenumber[0].'"';
 

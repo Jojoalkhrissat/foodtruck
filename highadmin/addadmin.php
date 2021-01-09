@@ -1,5 +1,5 @@
 <?php
-require "connect.php";
+require "../connect.php";
 
 	function time_to_decimal($time) {
     $timeArr = explode(':', $time);
@@ -156,7 +156,7 @@ $addadminphoto->execute();
 
 
 
-header('location:http://localhost/foodtruck/highadmin/admins');
+header('location:'.$baseurl.'/highadmin/admins');
 
 
 ?>

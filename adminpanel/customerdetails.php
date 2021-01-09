@@ -1,6 +1,7 @@
 
 <?php
-require 'connect.php';  
+require "../connect.php";
+require "../sql.php";
 $customer=$_GET['customerid']; 
 
 include('includes/header.php');

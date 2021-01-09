@@ -1,6 +1,7 @@
+
 <?php
-require "connect.php";
-require "sql.php";
+require "../connect.php";
+require "../sql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 	session_start();
@@ -49,7 +50,7 @@ echo "<h1>Wrong Email</h1>";
 sleep(10);
 
 
-header("Location: http://localhost/foodtruck/adminpanelft/forgot-password");
+header("Location: ".$baseurl."/adminpanelft/forgot-password");
 }
 
 

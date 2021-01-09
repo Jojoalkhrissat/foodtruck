@@ -1,6 +1,6 @@
 <?php
-require "connect.php";
-require "sql.php";
+require "../connect.php";
+require "../sql.php";
 
   session_start();
 $ad=$_GET['ad'];
@@ -73,7 +73,7 @@ echo '[{"message":"your item was entered"}]';
 
 
 
-header('location:http://localhost/foodtruck/highadmin/ads');
+header('location:'.$baseurl.'/highadmin/ads');
 
 
 ?>

@@ -1,5 +1,5 @@
 <?php
-require "connect.php";
+require "../connect.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 try{
 $post = file_get_contents('php://input');
@@ -7,15 +7,11 @@ session_unset();
 session_start();
 $_SESSION['username']=0;
 $_SESSION['password']=0;
-preg_match('/(?<=username":").+?(?=")/',$post,$username);
-preg_match('/(?<=password":").+?(?=")/',$post,$password);
-if(!isset($username[0])&&!isset($password[0])){
-preg_match('/(?<=username=).+?(?=&|$)/',$post,$username);
-preg_match('/(?<=password=).+?(?=&|$)/',$post,$password);
-}
-if(isset($username[0])&&isset($password[0])){
-$_SESSION['username']=$username[0];
-$_SESSION['password']=$password[0];	
+$username=$_POST['username'];
+$password=$_POST['password'];
+if(isset($username)&&isset($password)){
+$_SESSION['username']=$username;
+$_SESSION['password']=$password;	
 }
 
 
@@ -74,14 +70,14 @@ while($row = $getuser->fetch()):
 
 
 endwhile;
-header('location:http://localhost/foodtruck/highadmin/index');
+header('location:'.$baseurl.'/highadmin/index');
 
 
 
 }else{
 	http_response_code(401);
 	echo '[{"message":"you don\'t have access"}]';
-	header('location:http://localhost/foodtruck/highadmin/login');
+	header('location:'.$baseurl.'/highadmin/login');
 
 
 }
@@ -90,18 +86,18 @@ header('location:http://localhost/foodtruck/highadmin/index');
 }else{
 	http_response_code(401);
 	echo '[{"message":"Wrong phone number or password"}]';
-header('location:http://localhost/foodtruck/highadmin/login');
+header('location:'.$baseurl.'/highadmin/login');
 }
 }catch(Exception $e){
 	http_response_code(400);
 echo "400 error bad request";	
-header('location:http://localhost/foodtruck/highadmin/login');
+header('location:'.$baseurl.'/highadmin/login');
 }
 
 }else{
 	http_response_code(400);
 	echo "400 error bad request";
-header('location:http://localhost/foodtruck/highadmin/login');
+header('location:'.$baseurl.'/highadmin/login');
 }
 
 ?>

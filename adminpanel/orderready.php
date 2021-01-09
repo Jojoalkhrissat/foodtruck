@@ -1,6 +1,6 @@
 <?php
-require 'connect.php';
-require 'sql.php';
+require "../connect.php";
+require "../sql.php";
 require 'pushnotifications.php';   
 session_start();
 if(isset($_SESSION['id'])){
@@ -17,9 +17,9 @@ pushnotifications($customer[0],'your order is ready','طلبك جاهز','your o
 $accept='UPDATE orders set status="READY",orderend="'.$orderend.'" WHERE id="'.$orderid.'" ';
 sql_update($accept,$conn);
 
-header('location:http://localhost/foodtruck/adminpanel/ordersinprogress');
+header('Location: '.$baseurl.'/adminpanel/ordersinprogress');
 }else{
-	header('location:http://localhost/foodtruck/adminpanel/ordersinprogress');
+	header('Location: '.$baseurl.'/adminpanel/ordersinprogress');
 }
 
 
